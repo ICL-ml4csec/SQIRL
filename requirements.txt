@@ -1,0 +1,13 @@
+beautifulsoup4==4.11.1
+matplotlib==3.4.3
+nltk==3.7
+numpy==1.20.0
+playwright==1.25.1
+PyPika==0.48.9
+regex==2022.4.24
+requests==2.26.0
+requests_html==0.10.0
+scikit_learn==1.1.2
+sql_metadata==2.6.0
+sqlparse==0.4.2
+torch==1.10.0

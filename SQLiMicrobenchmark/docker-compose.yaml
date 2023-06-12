@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+    php-apache-environment:
+        container_name: php-apache
+        build:
+            context: ./
+            dockerfile: ./Dockerfile
+        depends_on:
+            - db
+            - db_seeder
+        volumes:
+            - ./:/var/www/html/
+        ports:
+            - 8000:80
+    db_seeder:
+        image: mysql
+        volumes:
+          - ./init.sql:/db.sql
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+        entrypoint: [ "bash", "-c", "sleep 40 && mysql --user=root --password=MYSQL_ROOT_PASSWORD --host=db --port=3306 mysql < /db.sql && exit"] 
+        depends_on:
+          - db
+    db:
+        container_name: db
+        image: mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+            MYSQL_ROOT_HOST: '%'
+            MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+            MYSQL_DATABASE: localhost
+            MYSQL_USER: server
+            MYSQL_PASSWORD: Qazwsxedcr12@
+            LOG_RAW: ON
+        volumes:
+            - ./mysql:/var/lib/mysql
+        ports:
+            - "9906:3306"
