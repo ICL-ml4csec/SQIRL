@@ -1,7 +1,7 @@
 import pprint
 
 from Environment.Environment import Game_Type
-from RL_Agent.Agents.One_Hot_Encoder_DQN_RND_Agent.Syntax_Fixing_Agent import Syntax_Fixing_Agent
+from RL_Agent.Agents.One_Hot_Encoder_DQN_Agent.Syntax_Fixing_Agent import Syntax_Fixing_Agent
 from RL_Agent.State_Representation.One_Hot_Encoder_State_Representation import One_Hot_Encoder_State_Representation
 class Agent_8:
     actions= ["add_comma","add_comment","comment_range","add_paranthesis","add_quote","add_whitespace","add_string",\

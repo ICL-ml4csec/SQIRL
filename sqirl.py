@@ -104,8 +104,8 @@ def main(stdscr):
         db_type = str(options.db_type)
         if options.log_file == None:
             raise Exception("--log_file file cant be None")
-        if options.login_function != None and options.auth_file_path == None or \
-            options.login_function == None and options.auth_file_path != None:
+        if options.login_function != None and options.module_path == None or \
+            options.login_function == None and options.module_path != None:
             raise Exception("If using authentication both --login_function_name and --auth_file_path must be set.")
         else:
             login_module = {'module_path':options.module_path, 'function':options.login_function }

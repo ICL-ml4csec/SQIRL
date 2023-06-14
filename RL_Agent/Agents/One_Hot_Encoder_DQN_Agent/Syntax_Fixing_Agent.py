@@ -1,7 +1,6 @@
 import copy
 import math
 import random
-
 import numpy as np
 from Environment.Environment import Game_Type
 from RL_Agent.Agents.Utils.DQN import DQN

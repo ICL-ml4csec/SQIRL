@@ -19,10 +19,10 @@ class Game_Type(Enum):
 class SQLI_Environment:
     game_to_token = {Game_Type.BEHAVIOR_CHANGING:[Token.Category.BEHAVIOR_CHANGING], Game_Type.SYNTAX_FIXING:[Token.Category.BASIC_BLOCK,Token.Category.SYNTAX_FIXING], Game_Type.SANITIZATION_ESCAPING:[Token.Category.SANATISATION_ESCAPING], Game_Type.DONE:[]}
     
-    def __init__(self,is_end_to_end,is_federated,crawler_input:tuple,sql_proxy_input:tuple,input_selection,verbose=0) -> None:
+    def __init__(self,is_end_to_end,is_federated,crawler_input:tuple,sql_proxy_input:tuple,input_selection, login_module,verbose=0) -> None:
         self.__input_storage = Input_storage()
         assert(len(crawler_input) == 2)
-        self.__crawler = Crawler(crawler_input[1],verbose)
+        self.__crawler = Crawler(crawler_input[1], login_module, verbose)
         assert(len(sql_proxy_input) == 2)
         if is_federated:
             self.__sql_filter = SQL_Filter_Worker(*sql_proxy_input)

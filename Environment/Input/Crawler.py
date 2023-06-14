@@ -26,7 +26,7 @@ class Crawler:
         self.login_url = None
         self.data = None
         self.max_local_links = 1000
-        if login_module is not None:
+        if login_module['module_path'] is not None and login_module['function'] is not None: 
             self.login_function = import_attr(login_module['module_path'], login_module['function'])
         else:
             self.login_function = None
