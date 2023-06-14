@@ -1,12 +1,13 @@
 <?php
-    $name = $_GET['name'];
-    $difficulty = $_GET['difficulty'];        
+    // CVE-2020-8841
+    $difficulty = $_GET['difficulty'];
+    echo 'CVE-2020-8841<br>';
+
     // database insert SQL code
     $servername = "db";
     $username = "server";
     $password = "Qazwsxedcr12@";
     $db = "sqliDB";
-
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $db);
@@ -15,21 +16,20 @@
     if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
     }
-
-
-    if (strripos($name, 'AND ')) {
-        $sql = "SELECT * FROM users WHERE name='' LIMIT 0, 1";
-    }else{
-        $sql = "SELECT * FROM users WHERE name='" .$name . "' LIMIT 0, 1";
-    }
-
-    // echo "".$sql."<br>";
     
+    
+    $name = 'invalid_user';
 
-    echo "Search: ".$name."<br>";
+    $id = isset($_GET['id']) ? trim($_GET['id']) : null;
+    $id = !is_null($id) && strlen($id) > 0 ? trim($id) : null;
+
+
+    $sql = "SELECT * FROM users WHERE (id=$id AND name='$name')";
+    echo "Search: ".$id.", ".$name."<br>";
 
     // insert in database 
-    $rs = mysqli_query($conn, $sql); 
+    $rs = mysqli_query($conn, $sql);
+   $rs = mysqli_query($conn, $sql);
     if($rs)
     {   if(strpos($difficulty, 'feed') !== False)
         {
@@ -73,7 +73,6 @@
             echo "Query feedback: NO<br>";
             echo 'Exception feedback: NO<br>';
         }
-
     }
 
 ?>

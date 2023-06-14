@@ -93,7 +93,7 @@
 / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ 
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'  `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
 </pre>
-<h2>Exception Feedback on page.</h2>
+<h2>Exception Feedback on page. Non-Vulnerable.</h2>
 <h3>Tasks 1 - 10. These input fields include a variety of different SQL statements to exploit, without any sanitation to user inputs. </h3>
 
 
@@ -105,7 +105,7 @@
 <h2> Task 1</h2>
 
 
- <form action="functions_external/sqli1.php" method="get">
+ <form action="non_vuln/non_vuln1.php" method="get">
   ID <input type="text" name="id"></br></br>
               <input type="hidden" name="difficulty" id="difficulty" value="exec">
 
@@ -125,7 +125,7 @@
 
 
         
-        <form action="functions_external/sqli2.php" method="get">
+        <form action="non_vuln/non_vuln2.php" method="get">
             Name <input type="text" name="name"></br></br>
             <input type="hidden" name="difficulty" id="difficulty" value="exec">
             
@@ -138,7 +138,7 @@
     </pre>
     <h2> Task 3</h2>
 
-    <form action="functions_external/sqli3.php" method="post">
+    <form action="non_vuln/non_vuln3.php" method="post">
             Password <input type="text" name="pass"></br></br>
               <input type="hidden" name="difficulty" id="difficulty" value="exec">
 
@@ -153,7 +153,7 @@
     <h2> Task 4</h2>
 
 
-         <form action="functions_external/sqli4.php" method="post">
+         <form action="non_vuln/non_vuln4.php" method="post">
             Name <input type="text" name="name"></br></br>
             
             <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -169,7 +169,7 @@
 
 
 
- <form action="functions_external/sqli5.php" method="get">
+ <form action="non_vuln/non_vuln5.php" method="get">
   Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -187,7 +187,7 @@
 
 
 
- <form action="functions_external/sqli6.php" method="get">
+ <form action="non_vuln/non_vuln6.php" method="get">
   Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -204,7 +204,7 @@
 
 
   
-   <form action="functions_external/sqli7.php" method="get">
+   <form action="non_vuln/non_vuln7.php" method="get">
     Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -220,7 +220,7 @@
 
 
 
- <form action="functions_external/sqli8.php" method="get">
+ <form action="non_vuln/non_vuln8.php" method="get">
   Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -236,7 +236,7 @@
 
 
   
-   <form action="functions_external/sqli9.php" method="get">
+   <form action="non_vuln/non_vuln9.php" method="get">
     Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -252,7 +252,7 @@
 
 
   
-   <form action="functions_external/sqli10.php" method="get">
+   <form action="non_vuln/non_vuln10.php" method="get">
     Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -267,7 +267,7 @@
     <h2> Task 11 </h2>
 
         
-         <form action="functions_external/sqli11.php" method="get">
+         <form action="non_vuln/non_vuln11.php" method="get">
             ID <input type="text" name="name"></br></br>
             <input type="hidden" name="difficulty" id="difficulty" value="exec">
             
@@ -282,7 +282,7 @@
 
 
         
-         <form action="functions_external/sqli12.php" method="get">
+         <form action="non_vuln/non_vuln12.php" method="get">
             ID <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -297,7 +297,7 @@
 
     <h2> Task 13 </h2>
 
-         <form action="functions_external/sqli13.php" method="get">
+         <form action="non_vuln/non_vuln13.php" method="get">
             
 </br>            Name2 <input type="text" name="name2">
 
@@ -305,7 +305,7 @@
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
             
             Submit Request: <button type="submit">Go</button>
-        </form>  
+        </form> 
         
 
     <pre>
@@ -320,7 +320,7 @@
 
 
         
-         <form action="functions_external/sqli14.php" method="get">
+         <form action="non_vuln/non_vuln14.php" method="get">
             ID <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -336,7 +336,7 @@
 
 
         
-         <form action="functions_external/sqli15.php" method="get">
+         <form action="non_vuln/non_vuln15.php" method="get">
             Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -352,7 +352,7 @@
 
 
         
-         <form action="functions_external/sqli16.php" method="get">
+         <form action="non_vuln/non_vuln16.php" method="get">
             Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -367,7 +367,7 @@
         <h2> Task 17 </h2>
 
 
-         <form action="functions_external/sqli17.php" method="get">
+         <form action="non_vuln/non_vuln17.php" method="get">
             Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -383,7 +383,7 @@
 
 
         
-         <form action="functions_external/sqli18.php" method="get">
+         <form action="non_vuln/non_vuln18.php" method="get">
             Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -397,7 +397,7 @@
     </pre>
         <h2> Task 19 </h2>
 
-         <form action="functions_external/sqli19.php" method="get">
+         <form action="non_vuln/non_vuln19.php" method="get">
             ID <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -405,7 +405,7 @@
             Submit Request: <button type="submit">Go</button>
         </form>
         
-  <pre>
+   <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
@@ -417,7 +417,7 @@
 
 
         
-         <form action="functions_external/sqli20.php" method="get">
+         <form action="non_vuln/non_vuln20.php" method="get">
 
 </br>            ID <input type="text" name="id">
 </br></br>
@@ -433,7 +433,7 @@
 
 
         
-         <form action="functions_external/sqli21.php" method="get">
+         <form action="non_vuln/non_vuln21.php" method="get">
 
          ID <input type="text" name="id">
 </br></br>
@@ -449,7 +449,7 @@
 
 
         
-         <form action="functions_external/sqli22.php" method="get">
+         <form action="non_vuln/non_vuln22.php" method="get">
 </br>            ID <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -464,7 +464,7 @@
 
 
         
-         <form action="functions_external/sqli23.php" method="get">
+         <form action="non_vuln/non_vuln23.php" method="get">
             Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -479,7 +479,7 @@
 
 
         
-         <form action="functions_external/sqli24.php" method="get">
+         <form action="non_vuln/non_vuln24.php" method="get">
             Name <input type="text" name="name">
 </br></br>   
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -494,7 +494,7 @@
 
 
         
-         <form action="functions_external/sqli25.php" method="get">
+         <form action="non_vuln/non_vuln25.php" method="get">
             Name <input type="text" name="name">
 </br></br>   
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -512,7 +512,7 @@
 
 
         
-         <form action="functions_external/sqli26.php" method="get">
+         <form action="non_vuln/non_vuln26.php" method="get">
             Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -527,7 +527,7 @@
 
 
         
-         <form action="functions_external/sqli27.php" method="get">
+         <form action="non_vuln/non_vuln27.php" method="get">
             Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -542,7 +542,7 @@
 
 
         
-         <form action="functions_external/sqli28.php" method="post">
+         <form action="non_vuln/non_vuln28.php" method="post">
 
             Name <input type="text" name="name"></br>
 </br></br>
@@ -558,7 +558,7 @@
 
 
         
-         <form action="functions_external/sqli29.php" method="get">
+         <form action="non_vuln/non_vuln29.php" method="get">
             Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">
@@ -573,7 +573,7 @@
 
 
         
-         <form action="functions_external/sqli30.php" method="get">
+         <form action="non_vuln/non_vuln30.php" method="get">
             Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="exec">

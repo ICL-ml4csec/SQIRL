@@ -1,11 +1,12 @@
 <?php
-    $name = $_GET['name'];
+    $id = $_GET['id'];
     $difficulty = $_GET['difficulty'];
     // database insert SQL code
     $servername = "db";
     $username = "server";
     $password = "Qazwsxedcr12@";
     $db = "sqliDB";
+
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $db);
@@ -15,9 +16,13 @@
     die("Connection failed: " . $conn->connect_error);
     }
 
-    $sql = "SELECT * FROM users WHERE name=('$name')";
-    echo "Search: ".$name."<br>";
-    // echo "".$sql."<br>";
+    echo "Search: ".$id."<br>";
+
+    $id = str_ireplace("and","",$id);
+
+
+    $sql = "SELECT * FROM users WHERE (id = '$id')";
+
 
     // insert in database 
     $rs = mysqli_query($conn, $sql);
@@ -31,7 +36,7 @@
                 $count += 1;
             }
             if(mysqli_num_rows($rs) == 0){
-                echo "YES<br>";
+                echo "<br>";
             }
             echo 'Exception feedback: NO<br>';
 
@@ -66,5 +71,4 @@
         }
 
     }
-
 ?>

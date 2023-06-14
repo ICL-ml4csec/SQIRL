@@ -1,11 +1,12 @@
 <?php
-    $id = $_GET['id'];
-    $difficulty = $_GET['difficulty'];
+    $name = $_GET['name'];
+    $difficulty = $_GET['difficulty'];        
     // database insert SQL code
     $servername = "db";
     $username = "server";
     $password = "Qazwsxedcr12@";
     $db = "sqliDB";
+
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $db);
@@ -15,23 +16,31 @@
     die("Connection failed: " . $conn->connect_error);
     }
 
-    echo "Search: ".$id."<br>";
 
-    $sql = "SELECT MIN(name) from users GROUP BY id HAVING id=" .  $id;
+    if (strripos($name, 'AND ')) {
+        $sql = "SELECT * FROM users WHERE name='' LIMIT 0, 1";
+    }else{
+        $sql = "SELECT * FROM users WHERE name='" .$name . "' LIMIT 0, 1";
+    }
+
+    // echo "".$sql."<br>";
+    
+
+    echo "Search: ".$name."<br>";
 
     // insert in database 
-    $rs = mysqli_query($conn, $sql);
+    $rs = mysqli_query($conn, $sql); 
     if($rs)
     {   if(strpos($difficulty, 'feed') !== False)
         {
             echo "Query feedback: ";
             $count = 0;
-            while($row = mysqli_fetch_assoc($rs)and $count < 10) {
-                echo implode($row). "<br>";
+            while($row = mysqli_fetch_assoc($rs) and $count < 10) {
+                echo "ID: " . $row["id"]. " - Name: " . $row["name"]. " - Pass: " . $row["pass"]. "<br>";
                 $count += 1;
             }
             if(mysqli_num_rows($rs) == 0){
-                echo "<br>";
+               echo "<br>";
             }
             echo 'Exception feedback: NO<br>';
 

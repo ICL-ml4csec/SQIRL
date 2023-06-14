@@ -76,14 +76,37 @@
 / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ 
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'  `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
 </pre>
-        There are three versions of this that provide different levels of feedback:
+        There are three vulnerable versions of this that provide different levels of feedback:
     <ul>
-       
         <li>
-            <a href="no_feedback.php"> Feedback on the Exception </a>
+            <a href="no_feedback.php"> No feedback of any Kind (Vulnerable)</a>
+        </li> 
+          <li>
+            <a href="feedback.php"> Feedback on the SQL query (Vulnerable)</a>
+        </li> 
+        <li>
+            <a href="exception.php"> Feedback on the Exception (Vulnerable)</a>
+        </li> 
+
+    </ul>
+        There are three non-vulnerable versions of this that provide different levels of feedback:
+    <ul>     
+        <li>
+            <a href="non_vuln_no_feedback.php"> No feedback of any Kind (Non-Vulnerable)</a>
+        </li> 
+          <li>
+            <a href="non_vuln_feedback.php"> Feedback on the SQL query (Non-Vulnerable)</a>
+        </li> 
+        <li>
+            <a href="non_vuln_exception.php"> Feedback on the Exception (Vulnerable)</a>
         </li> 
     </ul>
-
+        Finally there is the vulnerable samples used in training:
+    <ul>
+        <li>
+            <a href="non_vuln_exception.php"> Feedback on the Exception (Vulnerable)</a>
+        </li> 
+    </ul>
 
     </body>
 </html>

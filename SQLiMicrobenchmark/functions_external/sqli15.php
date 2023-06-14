@@ -6,6 +6,7 @@
     $username = "server";
     $password = "Qazwsxedcr12@";
     $db = "sqliDB";
+            
 
 
     // Create connection
@@ -18,11 +19,14 @@
 
     echo "Search: ".$id."<br>";
 
-    $id = str_ireplace("and","",$id);
-
+    $id = str_replace("AND","",$id);
+    $id = str_replace("and","",$id);
+    $id = str_replace("SLEEP","",$id);
+    $id = str_replace("sleep","",$id);
+    $id = str_replace("UNION","",$id);
 
     $sql = "SELECT * FROM users WHERE (id = '$id')";
-
+    // echo "".$sql."<br>";
 
     // insert in database 
     $rs = mysqli_query($conn, $sql);
@@ -36,7 +40,7 @@
                 $count += 1;
             }
             if(mysqli_num_rows($rs) == 0){
-                echo "<br>";
+                echo "YES<br>";
             }
             echo 'Exception feedback: NO<br>';
 

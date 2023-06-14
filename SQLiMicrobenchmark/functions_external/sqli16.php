@@ -1,38 +1,29 @@
 <?php
     $id = $_GET['id'];
-    $difficulty = $_GET['difficulty'];        
+    $difficulty = $_GET['difficulty'];
     // database insert SQL code
     $servername = "db";
     $username = "server";
     $password = "Qazwsxedcr12@";
     $db = "sqliDB";
 
-
     // Create connection
-
     $conn = new mysqli($servername, $username, $password, $db);
+                
+    // Check connection
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
     }
-    
-    // echo "".$sql."<br>";
-    echo "Search: ".$id."<br>";
-    $id = str_replace("AND","",$id);
-    $id = str_replace("and","",$id);
-    $id = str_replace("SLEEP","",$id);
-    $id = str_replace("sleep","",$id);
-    $id = str_replace("UNION","",$id);
-    // insert in database 
-    $sql = "SELECT * FROM users WHERE id LIKE '$id'";
 
+    echo "Search: ".$id."<br>";
+    $id = str_replace(" ","",$id);
+
+    $sql = "SELECT * FROM users WHERE (id = '$id')";
 
     // insert in database 
     $rs = mysqli_query($conn, $sql);
-    $data = $rs;
-    if($data)
-    {   
-        
-        if(strpos($difficulty, 'feed') !== False)
+    if($rs)
+    {   if(strpos($difficulty, 'feed') !== False)
         {
             echo "Query feedback: ";
             $count = 0;
@@ -41,9 +32,8 @@
                 $count += 1;
             }
             if(mysqli_num_rows($rs) == 0){
-                echo "<br>";
+                echo "YES<br>";
             }
-
             echo 'Exception feedback: NO<br>';
 
         }elseif(strpos($difficulty, 'exec') !== False){

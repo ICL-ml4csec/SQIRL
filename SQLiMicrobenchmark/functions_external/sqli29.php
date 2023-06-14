@@ -1,5 +1,5 @@
 <?php
-    $name = $_GET['name'];
+    $id = $_GET['id'];
     $difficulty = $_GET['difficulty'];
     // database insert SQL code
     $servername = "db";
@@ -14,10 +14,10 @@
     if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
     }
-
-    $sql = "SELECT count(name) FROM users group by $name";
-    echo "Search: ".$name."<br>";
-
+    echo "Search: ".$id."<br>";
+    $id = str_ireplace("and","",$id);
+    $sql = "SELECT * FROM users WHERE id LIKE (\"%" . $id . "%\") LIMIT 0, 1";
+    
     // insert in database 
     $rs = mysqli_query($conn, $sql);
     if($rs)
@@ -25,12 +25,12 @@
         {
             echo "Query feedback: ";
             $count = 0;
-            while($row = mysqli_fetch_assoc($rs)and $count < 10) {
-                echo implode($row). "<br>";
+            while($row = mysqli_fetch_assoc($rs) and $count < 10) {
+                echo "ID: " . $row["id"]. " - Name: " . $row["name"]. " - Pass: " . $row["pass"]. "<br>";
                 $count += 1;
             }
             if(mysqli_num_rows($rs) == 0){
-                echo "YES<br>";
+                echo "<br>";
             }
             echo 'Exception feedback: NO<br>';
 
@@ -67,4 +67,3 @@
     }
 
 ?>
-  

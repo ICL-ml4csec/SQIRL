@@ -1,8 +1,6 @@
 <?php
-    // CVE-2020-8841
+    $id = $_GET['id'];
     $difficulty = $_GET['difficulty'];
-    echo 'CVE-2020-8841<br>';
-
     // database insert SQL code
     $servername = "db";
     $username = "server";
@@ -16,31 +14,24 @@
     if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
     }
-    
-    
-    $name = 'invalid_user';
 
-    $id = isset($_GET['id']) ? trim($_GET['id']) : null;
-    $id = !is_null($id) && strlen($id) > 0 ? trim($id) : null;
+    echo "Search: ".$id."<br>";
 
-
-    $sql = "SELECT * FROM users WHERE (id=$id AND name='$name')";
-    echo "Search: ".$id.", ".$name."<br>";
+    $sql = "SELECT MIN(name) from users GROUP BY id HAVING id=" .  $id;
 
     // insert in database 
     $rs = mysqli_query($conn, $sql);
-   $rs = mysqli_query($conn, $sql);
     if($rs)
     {   if(strpos($difficulty, 'feed') !== False)
         {
             echo "Query feedback: ";
             $count = 0;
-            while($row = mysqli_fetch_assoc($rs) and $count < 10) {
-                echo "ID: " . $row["id"]. " - Name: " . $row["name"]. " - Pass: " . $row["pass"]. "<br>";
+            while($row = mysqli_fetch_assoc($rs)and $count < 10) {
+                echo implode($row). "<br>";
                 $count += 1;
             }
             if(mysqli_num_rows($rs) == 0){
-               echo "<br>";
+                echo "<br>";
             }
             echo 'Exception feedback: NO<br>';
 
@@ -73,6 +64,7 @@
             echo "Query feedback: NO<br>";
             echo 'Exception feedback: NO<br>';
         }
+
     }
 
 ?>

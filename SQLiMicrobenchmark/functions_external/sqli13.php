@@ -1,13 +1,13 @@
 <?php
-    $id = $_GET['id'];
+    
+    $name2 = $_GET['name2'];
+    
     $difficulty = $_GET['difficulty'];
     // database insert SQL code
     $servername = "db";
     $username = "server";
     $password = "Qazwsxedcr12@";
     $db = "sqliDB";
-            
-
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $db);
@@ -16,16 +16,14 @@
     if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
     }
+    $name1 = 'invalid_user';
+    $name3 = 'invalid_user2';
+    echo "Search: ".$name1.", ".$name2.", ".$name3."<br>";
 
-    echo "Search: ".$id."<br>";
+    
+    $sql = "SELECT * FROM users WHERE name='" . $name1 ."' OR name='" . $name2 ."' OR name='" . $name3 ."' LIMIT 0, 1";
+    
 
-    $id = str_replace("AND","",$id);
-    $id = str_replace("and","",$id);
-    $id = str_replace("SLEEP","",$id);
-    $id = str_replace("sleep","",$id);
-    $id = str_replace("UNION","",$id);
-
-    $sql = "SELECT * FROM users WHERE (id = '$id')";
     // echo "".$sql."<br>";
 
     // insert in database 
@@ -75,4 +73,5 @@
         }
 
     }
+
 ?>

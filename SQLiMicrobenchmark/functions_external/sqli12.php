@@ -1,5 +1,5 @@
 <?php
-    $id = $_GET['id'];
+    $name = $_GET['name'];
     $difficulty = $_GET['difficulty'];
     // database insert SQL code
     $servername = "db";
@@ -15,15 +15,9 @@
     die("Connection failed: " . $conn->connect_error);
     }
 
-    echo "Search: ".$id."<br>";
-    $id = str_replace("AND","",$_GET['id']);
-    $id = str_replace("and","",$id);
-    $id = str_replace("SLEEP","",$id);
-    $id = str_replace("sleep","",$id);
-    $id = str_replace("UNION","",$id);
-
-    $sql = "SELECT * FROM users WHERE id = '$id'";
-    
+    $sql = "SELECT * FROM users WHERE name=`$name` GROUP BY id";
+    echo "Search: ".$name."<br>";
+    // echo "".$sql."<br>";
 
     // insert in database 
     $rs = mysqli_query($conn, $sql);

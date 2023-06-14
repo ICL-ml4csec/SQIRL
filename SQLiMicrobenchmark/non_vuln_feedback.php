@@ -87,15 +87,15 @@
             }
         ?>
         <!--  -->
-        <!-- inputs to be inserted -->
         <!--  -->
     <pre>
 .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
 / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ 
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'  `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
 </pre>
-<h2>Test Context Escape - Query Feedback</h2>
+<h2>Query Feedback on page. Non-Vulnerable.</h2>
 <h3>Tasks 1 - 10. These input fields include a variety of different SQL statements to exploit, without any sanitation to user inputs. </h3>
+
 
 <pre>
 .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
@@ -104,13 +104,12 @@
 </pre>
 <h2> Task 1</h2>
 
-<!-- select -->
 
  <form action="non_vuln/non_vuln1.php" method="get">
   ID <input type="text" name="id"></br></br>
               <input type="hidden" name="difficulty" id="difficulty" value="feed">
 
-              Feedback
+              
   Submit Request: <button type="submit">Go</button>
 </form>
 
@@ -125,11 +124,11 @@
     <h2> Task 2</h2>
 
 
-        <!-- select -->
+        
         <form action="non_vuln/non_vuln2.php" method="get">
             Name <input type="text" name="name"></br></br>
             <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
+            
             Submit Request: <button type="submit">Go</button>
         </form>
     <pre>
@@ -139,12 +138,11 @@
     </pre>
     <h2> Task 3</h2>
 
-        <!-- update statement -->
     <form action="non_vuln/non_vuln3.php" method="post">
             Password <input type="text" name="pass"></br></br>
               <input type="hidden" name="difficulty" id="difficulty" value="feed">
 
-            Feedback
+            
             Submit Request: <button type="submit">Update</button>
         </form> 
     <pre>
@@ -155,11 +153,11 @@
     <h2> Task 4</h2>
 
 
-        <!-- insert -->
          <form action="non_vuln/non_vuln4.php" method="post">
             Name <input type="text" name="name"></br></br>
+            
             <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
+            
             Submit Request: <button type="submit">Create</button>
         </form>
     <pre>
@@ -170,12 +168,12 @@
   <h2> Task 5</h2>
 
 
-<!-- select -->
+
  <form action="non_vuln/non_vuln5.php" method="get">
   Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-        Feedback
+        
   Submit Request: <button type="submit">Go</button>
 </form>
 
@@ -188,12 +186,12 @@
   <h2> Task 6</h2>
 
 
-<!-- select -->
+
  <form action="non_vuln/non_vuln6.php" method="get">
   Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
+            
   Submit Request: <button type="submit">Go</button>
 </form>
 
@@ -205,12 +203,12 @@
   <h2> Task 7 </h2>
 
 
-  <!-- select -->
+  
    <form action="non_vuln/non_vuln7.php" method="get">
     Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
+            
     Submit Request: <button type="submit">Go</button>
   </form>
     <pre>
@@ -221,12 +219,12 @@
     <h2> Task 8</h2>
 
 
-<!-- select -->
+
  <form action="non_vuln/non_vuln8.php" method="get">
   Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
+            
   Submit Request: <button type="submit">Go</button>
 </form>
     <pre>
@@ -237,12 +235,12 @@
   <h2> Task 9</h2>
 
 
-  <!-- select -->
+  
    <form action="non_vuln/non_vuln9.php" method="get">
-    Name <input type="text" name="id">
+    Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
+            
     Submit Request: <button type="submit">Go</button>
   </form>
   <pre>
@@ -253,36 +251,27 @@
   <h2> Task 10</h2>
 
 
-  <!-- select -->
+  
    <form action="non_vuln/non_vuln10.php" method="get">
     Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
+            
     Submit Request: <button type="submit">Go</button>
   </form>
-<pre>
-
-
-.-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
-/ / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ 
-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'  `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
-</pre>
-<h1>Test Sanitisation</h2>
-    <h3>Tasks 11 - 15. These input fields include a variety of different SQL statements to exploit, with sanitation to user inputs. </h3>
-<pre>
-.-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
-/ / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ 
-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'  `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
-</pre>
+    <pre>
+    .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
+ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
+`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
+    </pre>
     <h2> Task 11 </h2>
 
-        <!-- select with mysqli escape and no quotes -->
+        
          <form action="non_vuln/non_vuln11.php" method="get">
-            ID <input type="text" name="id"></br></br>
+            ID <input type="text" name="name"></br></br>
             <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>
     <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
@@ -292,45 +281,52 @@
     <h2> Task 12 </h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln12.php" method="get">
-            ID <input type="text" name="id">
+            ID <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>
     <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
     </pre>
+
     <h2> Task 13 </h2>
 
 
-        <!-- select with special escape keywords-->
+    <h2> Task 13 </h2>
+
          <form action="non_vuln/non_vuln13.php" method="get">
-            ID <input type="text" name="id">
+            
+</br>            Name2 <input type="text" name="name2">
+
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
-        </form>
+            
+            Submit Request: <button type="submit">Go</button>
+        </form> 
     <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
     </pre>
+        <h1>Test Sanitisation</h2>
+    <h3>Tasks 14 - 20. These input fields include a variety of different SQL statements to exploit, with sanitation to user inputs. </h3>
+
     <h2> Task 14 </h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln14.php" method="get">
             ID <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>
     <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
@@ -340,13 +336,13 @@
     <h2> Task 15 </h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln15.php" method="get">
             Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>
             <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
@@ -356,13 +352,13 @@
         <h2> Task 16 </h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln16.php" method="get">
             Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>
     <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
@@ -373,11 +369,11 @@
 
 
          <form action="non_vuln/non_vuln17.php" method="get">
-            Name <input type="text" name="name">
+            Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get Name</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>
     <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
@@ -387,13 +383,13 @@
         <h2> Task 18 </h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln18.php" method="get">
-            Name <input type="text" name="name">
+            Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>
     <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
@@ -403,122 +399,125 @@
         <h2> Task 19 </h2>
 
 
-        <!-- select with special escape keywords-->
          <form action="non_vuln/non_vuln19.php" method="get">
-</br>            Name2 <input type="text" name="name2">
-
+            ID <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
-        </form>    <pre>
+            
+            Submit Request: <button type="submit">Go</button>
+        </form>   <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
     </pre>
-        <h2> Task 20 </h2>
+        <h1>Test on realworld CVEs</h2>
+    <h3>Tasks 20 - 25. These input fields include a variety of different SQL statements to exploit that are pulled from real world CVEs. </h3>
+
+        <h2> Task 20</h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln20.php" method="get">
+
 </br>            ID <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>    <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
     </pre>
-        <h2> Task 21 </h2>
+        <h2> Task 21 - CVE-2020-8637</h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln21.php" method="get">
 
          ID <input type="text" name="id">
-
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>    <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
     </pre>
-        <h2> Task 22 </h2>
+        <h2> Task 22 - CVE-2020-8638</h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln22.php" method="get">
 </br>            ID <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>    <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
     </pre>
-        <h2> Task 23 </h2>
+        <h2> Task 23 - CVE-2023-30605</h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln23.php" method="get">
             Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>    <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
     </pre>
-        <h2> Task 24 </h2>
+        <h2> Task 24 - CVE-2023-24812</h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln24.php" method="get">
             Name <input type="text" name="name">
 </br></br>   
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
              </form><pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
     </pre>
-        <h2> Task 25 </h2>
+        <h2> Task 25  - CVE-2020-8841</h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln25.php" method="get">
             Name <input type="text" name="name">
 </br></br>   
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
             </form> <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
     </pre>
-        
+            <h1>Test Sanitisation</h2>
+    <h3>Tasks 26 - 30. These input fields include a variety of different SQL statements to exploit, with sanitation to user inputs. </h3>
+
         <h2> Task 26 </h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln26.php" method="get">
-            Name <input type="text" name="id">
+            Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>    <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
@@ -527,13 +526,13 @@
         <h2> Task 27 </h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln27.php" method="get">
             Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>    <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
@@ -542,14 +541,14 @@
         <h2> Task 28 </h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln28.php" method="post">
 
             Name <input type="text" name="name"></br>
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>    <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
@@ -558,13 +557,13 @@
                 <h2> Task 29 </h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln29.php" method="get">
-            Name <input type="text" name="name">
+            Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>    <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
@@ -573,13 +572,13 @@
         <h2> Task 30 </h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="non_vuln/non_vuln30.php" method="get">
             Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="feed">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>
     </body>
 </html>

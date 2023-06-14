@@ -1,7 +1,5 @@
 <?php
-    
-    $name2 = $_GET['name2'];
-    
+    $id = $_GET['id'];
     $difficulty = $_GET['difficulty'];
     // database insert SQL code
     $servername = "db";
@@ -16,19 +14,14 @@
     if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
     }
-    $name1 = 'invalid_user';
-    $name3 = 'invalid_user2';
-    echo "Search: ".$name1.", ".$name2.", ".$name3."<br>";
+    echo "Search: ".$id."<br>";
 
-    
-    $sql = "SELECT * FROM users WHERE name='" . $name1 ."' OR name='" . $name2 ."' OR name='" . $name3 ."' LIMIT 0, 1";
-    
+    $id = $conn->real_escape_string($id);
 
-    // echo "".$sql."<br>";
-
+    $sql = "SELECT * FROM users WHERE id = $id";
     // insert in database 
     $rs = mysqli_query($conn, $sql);
-    if($rs)
+        if($rs)
     {   if(strpos($difficulty, 'feed') !== False)
         {
             echo "Query feedback: ";

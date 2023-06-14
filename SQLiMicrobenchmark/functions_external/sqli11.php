@@ -1,5 +1,5 @@
 <?php
-    $id = $_GET['id'];
+    $name = $_GET['name'];
     $difficulty = $_GET['difficulty'];
     // database insert SQL code
     $servername = "db";
@@ -14,14 +14,14 @@
     if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
     }
-    echo "Search: ".$id."<br>";
 
-    $id = $conn->real_escape_string($id);
+    $sql = "SELECT * FROM users WHERE name=('$name')";
+    echo "Search: ".$name."<br>";
+    // echo "".$sql."<br>";
 
-    $sql = "SELECT * FROM users WHERE id = $id";
     // insert in database 
     $rs = mysqli_query($conn, $sql);
-        if($rs)
+    if($rs)
     {   if(strpos($difficulty, 'feed') !== False)
         {
             echo "Query feedback: ";
