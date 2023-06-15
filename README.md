@@ -1,4 +1,5 @@
 
+
 # SQIRL: Grey-Box Detection of SQL Injection Vulnerabilities Using Reinforcement Learning
 
 Web security scanners are commonly used to discover SQL injection vulnerabilities in deployed web applications. Scanners tend to use static sets of rules to cover the most common injection cases, missing diversity in their payloads leading to a high volume of requests and false negatives. Moreover, in order to detect web application vulnerabilities, scanners often rely on error messages or other significant feedback on the web application pages, which are the result of additional insecure programming practices by web developers. In this paper, we develop SQIRL, a novel approach to detecting SQL injection vulnerabilities based on deep reinforcement learning, using multiple worker agents. Each worker intelligently fuzzes the input fields discovered by an automated crawling component. This approach generates a more varied set of payloads than existing scanners, leading to the discovery of more vulnerabilities. Moreover, SQIRL attempts fewer payloads, because they are generated in a targeted fashion. SQIRL finds all vulnerabilities in our novel SQLi MicroBenchmark for SQL injection, with substantially fewer requests than most of the state-of-the-art scanners compared with. We further run SQIRL on a set of production grade web applications and discover 33 vulnerabilities, with zero false positives, in 14 websites. We have responsibly disclosed the novel vulnerabilities and currently obtained 6 CVEs for them.
@@ -78,19 +79,28 @@ The code contains the four variants SQIRL in addition to its random equivalent :
 
 SQIRL has several command line arguments to alter its behaviour:
 ```
---url (-u) 					# Start URL
---level						# Depth for the crawler to traverse
+# Crawling flags
+--url (-u) 							# Start URL
+--level									# Depth for the crawler to traverse
 --login_function_name		# Function name for the authentication module in --auth_file_path
---auth_file_path			# Path to the .py file used for authentication
---log_file					# Path to the log file of the SQL database
---agent_unique_id (-i)		# ID of the agent used for logging
---agent: 					# SQIRL Variant: 0 for Random, 1 for DQN, 2 for DQN_RND, 3 for One_Hot_Encoder_DQN_RND, 4 for Worker_DQN_RND
---model_dir: 					# Directory containing model checkpoints, if not set a new agent will begin training
---episodes (-e)				# Maximum number of episodes per input found
---max_timestamp				# Maximum timesteps per episode
---win_criteria				# Minimum number of vulnerabilities found before switching inputs
---loss_criteria				# Maximum number of episodes before switching inputs
---input_selection			# Method to select next input: 1 FIFO queue, 2 is random
+--auth_file_path				# Path to the .py file used for authentication
+
+# Database flags
+--log_file							# Path to the log file of the SQL database
+--db_type								# Type of Database e.g. mysql
+
+# Agent Flags 
+--agent_unique_id (-i)	# ID of the agent used for logging
+--agent 								# SQIRL Variant: 0 for Random, 1 for DQN, 2 for DQN_RND, 3 for One_Hot_Encoder_DQN_RND, 4 for Worker_DQN_RND
+--learning							# Boolean to set if SQIRL is in learning mode
+
+# Environment Flags 
+--episodes (-e)					# Maximum number of episodes per input found
+--max_timestamp					# Maximum timesteps per episode
+--win_criteria					# Minimum number of vulnerabilities found before switching inputs
+--loss_criteria					# Maximum number of episodes before switching inputs
+--input_selection				# Method to select next input: 1 FIFO queue, 2 is random
+--verbose (-v)			 		# Set verbose level 0, 1, 2
 ```
 
 ### Authentication
@@ -109,28 +119,15 @@ example:
 ```
 python3 sqirl.py -i 1 -u http://localhost:8000/no_feedback.php -v 2 --log_file /path/to/mysql/log.log --agent 2
 ```
-### Worker Agents
-For the worker agents, the server need to be executed first. Where the federation server has one parameter:
+### Non-Centralised Agents (4)
+SQIRL is also designed to run with a number of worker agents with a centralised agent. The sever with the centralised agent needs to be run first. The federation server has one parameter:
 - -u | --users: number of clients/workers
 
-#### worker_DQN_RND Server:
+
 ```
 python3 Worker_DQN_RND_Server.py -u NUMBER_OF_CLIENTS -model_dir path/to/saved/model
 ```
-
-## Log files
-
-During each run the agent will produce and save details of its generatation including the payload, sql, reward etc for analysis, all of the log files are named based on the agent id supplied (--agent). All of the logs are available at stats_log.
-
-## Pretrained models
-We include the DQN and DQN_RND Agent models, as models for the worker agents and the one-hot-encoded agents were too large to include here.
-The worker agent variant and one-hot encoded variant can be trained using the `sqirl.py` file, as follows:
-```
-# One hot encoded agent
-python3 sqirl.py -i 1 -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --agent 2 --loss_critera 9999999 --win_criteria 14 --agent 3
-```
-
-Worker agent variant each of the worker agents must be run in a separate terminal instance after having run the server as above:
+Each of the worker agents can then be run from an alternative terminal following the instructions for the Centralised Agents:
 ```
 python3 sqirl.py -i 1 -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --agent 2 --loss_critera 9999999 --win_criteria 14 --agent 4 -i 1
 python3 sqirl.py -i 1 -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --agent 2 --loss_critera 9999999 --win_criteria 14 --agent 4 -i 2
@@ -138,7 +135,27 @@ python3 sqirl.py -i 1 -u http://localhost:8000/training.php -v 2 --log_file /pat
 python3 sqirl.py -i 1 -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --agent 2 --loss_critera 9999999 --win_criteria 14 --agent 4 -i 4
 ```         
 
-Please cite as:
+## Log files
+
+During each run the agent will produce and save details of its generation including the payload, sql, reward etc for analysis, all of the log files are named based on the agent id supplied (--agent). All of the logs are available at stats_log.
+
+## Pretrained models
+
+We include the DQN and Worker_DQN Agent models.
+
+## Training SQIRL 
+To train the variants of sqirl 
+```
+# DQN agent
+python3 sqirl.py -i 1 -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --loss_critera 9999999 --win_criteria 14 --agent 1
+# DQN agent using RND
+python3 sqirl.py -i 1 -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --loss_critera 9999999 --win_criteria 14 --agent 2
+# DQN agent using a one-hot-encoded input space 
+python3 sqirl.py -i 1 -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --loss_critera 9999999 --win_criteria 14 --agent 3
+
+```
+
+Please cite this work as:
 ```
 
 @inproceedings{sqirl_2023,

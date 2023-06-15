@@ -31,60 +31,65 @@ def main(stdscr):
         parser = optparse.OptionParser()
 
         parser.add_option('-u', '--url',
-                            action="store", dest="url",
-                            help="Full URL to crawl", default=None)
+                          action="store", dest="url",
+                          help="Full URL to crawl", default=None)
 
         parser.add_option('-i', '--agent_unique_id',
-                            action="store", dest="agent_unique_id",
-                            help="agent unique id", default=1)
+                          action="store", dest="agent_unique_id",
+                          help="ID of the agent used for logging", default=1)
 
-        parser.add_option( '--level',
-                            action="store", dest="level",
-                            help="Level of depth to traverse", default="0")
+        parser.add_option('--level',
+                          action="store", dest="level",
+                          help="Depth for the crawler to traverse", default="0")
 
-        parser.add_option( '--db_type',
-                            action="store", dest="db_type",
-                            help="type of database", default="mysql")
+        parser.add_option('--db_type',
+                          action="store", dest="db_type",
+                          help="Type of Database e.g. mysql", default="mysql")
 
-        parser.add_option( '--log_file',
-                            action="store", dest="log_file",
-                            help="path to log file", default=None)
+        parser.add_option('--log_file',
+                          action="store", dest="log_file",
+                          help="Path to the log file of the SQL database", default=None)
 
-        parser.add_option( '--learning',
-                            action="store", dest="learning",
-                            help="does the agent learn", default=True)
+        parser.add_option('--learning',
+                          action="store", dest="learning",
+                          help="does the agent learn", default=True)
 
         parser.add_option('-e', '--episodes',
-                            action="store", dest="episodes",
-                            help="number of episodes", default=10)
+                          action="store", dest="episodes",
+                          help="Maximum number of episodes per input found", default=10)
 
-        parser.add_option( '--max_timestamp',
-                            action="store", dest="max_timestamp",
-                            help="number of max timestamp", default=10)
+        parser.add_option('--max_timestamp',
+                          action="store", dest="max_timestamp",
+                          help="Maximum timesteps per episode", default=10)
 
-        parser.add_option( '--win_criteria',
-                            action="store", dest="win_criteria",
-                            help="number of win_criteria", default=1)
+        parser.add_option('--win_criteria',
+                          action="store", dest="win_criteria",
+                          help="Minimum number of vulnerabilities found before switching inputs", default=1)
 
-        parser.add_option( '--loss_criteria',
-                            action="store", dest="loss_criteria",
-                            help="number of loss_criteria", default=10)
+        parser.add_option('--loss_criteria',
+                          action="store", dest="loss_criteria",
+                          help="Maximum number of episodes before switching inputs", default=10)
 
         parser.add_option('-v', '--verbose',
-                            action="store", dest="verbose",
-                            help="Set verbose mode ON", default="0")
+                          action="store", dest="verbose",
+                          help="Set verbose level 0, 1, 2", default="0")
 
         parser.add_option('--input_selection',
-                            action="store", dest="input_selection",
-                            help="the way input is selected: 1 for FIFO queue, 2 for random picking", default=2)
-        
+                          action="store", dest="input_selection",
+                          help="Method to select next input: 1 FIFO queue, 2 is random", default=2)
+
         parser.add_option('--agent',
-                            action="store", dest="agent_type",
-                            help="type of agent: 1 for DQN, 2 for DQN_RND, 3 for End_to_End, 4 for One_Hot_Encoder_DQN_RND, 5 for Federated_DQN_RND, 6 for Federated_end_to_end", default=1)
+                          action="store", dest="agent_type",
+                          help="SQIRL Variant: 0 for Random, 1 for DQN, 2 for DQN_RND, 3 for One_Hot_Encoder_DQN_RND, 4 for Worker_DQN_RND",
+                          default=1)
 
         parser.add_option( '--model_dir',
                             action="store", dest="model_dir",
                             help="Directory containing model checkpoints, if not set a new agent will begin training", default=None)
+
+        parser.add_option('--training',
+                          action="store", dest="train",
+                          help="Boolean to set if SQIRL is in learning mode", default=False)
 
         parser.add_option('--login_function_name',
                           action="store", dest="login_function",
