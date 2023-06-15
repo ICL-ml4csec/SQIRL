@@ -9,18 +9,25 @@ import os
 from RL_Agent.Agents.Utils.RDN import RDN
 from RL_Agent.State_Representation.State_Representation import State_Representation
 class Syntax_Fixing_Agent:
-    def __init__(self,agent_id,model_checkpoint_file,learning=True) -> None:
+    def __init__(self,agent_id,model_checkpoint_file,load,learning=True) -> None:
         # whether to update the q values or not
         self.learning = learning
 
         # q values
         # input size is representation + error + action value + error
         # output size is 1
+
         q_value_file = os.path.join(model_checkpoint_file,f"Q_value_{agent_id}.model")
         q_value_file_mem = os.path.join(model_checkpoint_file,f"Q_value_{agent_id}.mem")
+
+        try:
+            load = os.path.join(load,f"Q_value_{agent_id}.mem")
+        except:
+            pass
+        
         server_host = "127.0.0.1"
         server_port = 1234
-        self.action_Q_value = DQNWorker(State_Representation.size() + 5, 1, q_value_file, q_value_file_mem, f"syntax_fixing_action_{agent_id}", server_host, server_port, learning)
+        self.action_Q_value = DQNWorker(State_Representation.size() + 5, 1, q_value_file, q_value_file_mem, f"syntax_fixing_action_{agent_id}", server_host, server_port, learning,load=load)
         self.rdn = RDN(State_Representation.size()+5,1000,q_value_file,q_value_file_mem,f"syntax_fixing_action_{agent_id}")
         self.epsilon = 0.6
         self.decay_rate = 0.9999

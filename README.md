@@ -85,6 +85,7 @@ SQIRL has several command line arguments to alter its behaviour:
 --log_file					# Path to the log file of the SQL database
 --agent_unique_id (-i)		# ID of the agent used for logging
 --agent: 					# SQIRL Variant: 0 for Random, 1 for DQN, 2 for DQN_RND, 3 for One_Hot_Encoder_DQN_RND, 4 for Worker_DQN_RND
+--model_dir: 					# Directory containing model checkpoints, if not set a new agent will begin training
 --episodes (-e)				# Maximum number of episodes per input found
 --max_timestamp				# Maximum timesteps per episode
 --win_criteria				# Minimum number of vulnerabilities found before switching inputs
@@ -114,7 +115,7 @@ For the worker agents, the server need to be executed first. Where the federatio
 
 #### worker_DQN_RND Server:
 ```
-python3 Worker_DQN_RND_Server.py -u NUMBER_OF_CLIENTS
+python3 Worker_DQN_RND_Server.py -u NUMBER_OF_CLIENTS -model_dir path/to/saved/model
 ```
 
 ## Log files

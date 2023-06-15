@@ -17,7 +17,7 @@ from RL_Agent.Agents.Utils.Neural_Network import DQN_neural_network
 # Get cpu or gpu device for training.
 device = "cuda" if torch.cuda.is_available() else "cpu"
 class DQN:
-    def __init__(self,state_size,action_size,save_file_model,save_file_mem,name,learning=True) -> None:
+    def __init__(self,state_size,action_size,save_file_model,save_file_mem,name,load,learning=True) -> None:
         self.learning = learning
         self.BATCH_SIZE = 512
         self.GAMMA = 1
@@ -28,23 +28,31 @@ class DQN:
         self.save_every = 100
         self.learning_rate = 0.00005
         self.name = name
-        self.Q_value = DQN_neural_network.load_model(save_file_model)
-        if self.Q_value is None:
+        try: 
+            model_path = os.path.join(load,"Q_value.model")
+            self.Q_value = DQN_neural_network.load_model(model_path)
+            if self.Q_value is None:
+               self.Q_value = DQN_neural_network(state_size,action_size)
+            print(f"Model loaded from {model_path}")
+        except:
+            print('No saved model found, starting from scratch...')
             self.Q_value = DQN_neural_network(state_size,action_size)
-
-        self.memory = DQN.load_mem(save_file_mem)
+        self.memory = DQN.load_mem(load)
         if self.memory is None:
             self.memory = deque(maxlen=self.MEM_CAPACITY)
+            
+        if not os.path.exists(save_file_model):
+            os.makedirs(save_file_model.split('Q_value.model')[0])
 
         self.optimizer = torch.optim.Adam(self.Q_value.parameters(), lr=self.learning_rate)
         self.loss_fn = torch.nn.SmoothL1Loss()
         self.save_dir_model = save_file_model
         self.save_dir_mem = save_file_mem
-
         pass
 
     def save(self,curr_step):
         print('saving...')
+
         save_path = (
             self.save_dir_model
         )
@@ -57,15 +65,17 @@ class DQN:
         with open(self.save_dir_mem,"wb") as f:
             pickle.dump(self.memory,f)
 
-
+    
     def load_mem(path):
         try:
+            path = os.path.join(path,"Q_value.mem")
             with open(path,"rb") as f:
                 data = pickle.load(f)
 
                 return data
         except:
             return None
+
 
     def tune_network(self,curr_step):
         if curr_step % self.sync_every == 0:
