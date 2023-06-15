@@ -89,8 +89,7 @@ class Agent_8:
         # syntax
         loss_2_1 = self.syntax_fixing_agent.action_Q_value.tune_network(self.global_timestamp)
 
-        # rdn
-        self.syntax_fixing_agent.rdn.tune_network(self.global_timestamp)
+        
         
 
 

@@ -18,7 +18,7 @@ class Syntax_Fixing_Agent:
         # output size is 1
         q_value_file = os.path.join(model_checkpoint_file,"Q_value.model")
         q_value_file_mem = os.path.join(model_checkpoint_file,"Q_value.mem")
-        self.action_Q_value = DQN(State_Representation.size()+5,1,q_value_file,q_value_file_mem,"syntax_fixing_action",learning,load=load)
+        self.action_Q_value = DQN(State_Representation.size()+5,1,q_value_file,q_value_file_mem,"syntax_fixing_action",learning=learning,load=load)
         self.rdn = RDN(State_Representation.size()+5,1000,q_value_file,q_value_file_mem,"syntax_fixing_action")
         self.epsilon = 0.6
         self.decay_rate = 0.9999

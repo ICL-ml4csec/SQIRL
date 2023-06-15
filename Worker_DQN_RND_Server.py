@@ -9,6 +9,7 @@ import socket
 from _thread import *
 import struct
 import sys
+import time
 from RL_Agent.Agents.Utils.Neural_Network import WorkerNeuralNetwork
 from RL_Agent.State_Representation.State_Representation import State_Representation
 import threading
@@ -23,7 +24,10 @@ mutex_4 = threading.Lock()
 mutex_5 = threading.Lock()
 host = '127.0.0.1'
 port = 1234
-save_file_model= os.path.join("RL_Agent","Agents","Worker_DQN_RND_Server","Checkpoint","Q_value.model")
+save_time = time.strftime("%Y-%m-%d_%H-%M-%S")
+#global save_file_model
+save_file_model = os.path.join("RL_Agent","Agents","Worker_DQN_RND_Server","Checkpoint","Q_value.model")
+save_file_model = re.sub('Checkpoint', f'Checkpoint-{save_time}', save_file_model)
 state_size = State_Representation.size()+5
 action_size = 1
 agents_paramters = []
@@ -152,7 +156,7 @@ def update_paramters():
     global __finished_update
     global neural_network
     global agents_paramters    
-    global clients
+    global save_file_model
 
 
     assert(len(agents_paramters) == get_clients())
@@ -217,11 +221,12 @@ if __name__ == "__main__":
             print("No saved model. Initlize new Neural Network....")
             neural_network = WorkerNeuralNetwork(state_size, action_size)
 
-        save_time = time.strftime("%Y-%m-%d_%H-%M-%S")
-        global save_file_model
-        save_file_model = re.sub('Checkpoint', f'Checkpoint-{save_time}')
 
-        print(f'Model will be saved in f{save_file_model}')
+        save_time = time.strftime("%Y-%m-%d_%H-%M-%S")
+        #global save_file_model
+        save_file_model = re.sub('Checkpoint', f'Checkpoint-{save_time}', save_file_model)
+        os.makedirs(save_file_model.split('Q_value.model')[0])
+        print(f'Model will be saved in {save_file_model}') 
 
         set_clients(int(options.clients))
 

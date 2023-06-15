@@ -27,7 +27,7 @@ class Syntax_Fixing_Agent:
         
         server_host = "127.0.0.1"
         server_port = 1234
-        self.action_Q_value = DQNWorker(State_Representation.size() + 5, 1, q_value_file, q_value_file_mem, f"syntax_fixing_action_{agent_id}", server_host, server_port, learning,load=load)
+        self.action_Q_value = DQNWorker(State_Representation.size() + 5, 1, q_value_file, q_value_file_mem, f"syntax_fixing_action_{agent_id}", server_host, server_port, learning=learning,load=load)
         self.rdn = RDN(State_Representation.size()+5,1000,q_value_file,q_value_file_mem,f"syntax_fixing_action_{agent_id}")
         self.epsilon = 0.6
         self.decay_rate = 0.9999

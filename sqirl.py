@@ -153,17 +153,13 @@ def main(stdscr):
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
             agent = Agent_6(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
         elif agent_type == 3:#One_Hot_Encoder_DQN_RND
-            model_checkpoint_file = os.path.join("/RL_Agent","Agents","One_Hot_Encoder_DQN_RND_Agent",f"Checkpoint-{save_time}")
+            model_checkpoint_file = os.path.join("/RL_Agent","Agents","One_Hot_Encoder_DQN_Agent",f"Checkpoint-{save_time}")
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
-            agent = Agent_9(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
+            agent = Agent_8(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
         elif agent_type == 4:#Worker_DQN_RND
             model_checkpoint_file = os.path.join("/RL_Agent","Agents","Worker_DQN_RND_Client",f"Checkpoint-{save_time}")
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
             agent = Agent_11(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
-        elif agent_type == 5:#One_Hot_Encoder_DQN_RND
-            model_checkpoint_file = os.path.join("/RL_Agent","Agents","One_Hot_Encoder_DQN_Agent",f"Checkpoint-{save_time}")
-            model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
-            agent = Agent_8(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
         else:
             model_checkpoint_file = os.path.join("/RL_Agent","Agents","DQN_Agent",f"Checkpoint-{save_time}")
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)

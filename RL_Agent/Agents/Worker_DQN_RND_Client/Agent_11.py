@@ -13,7 +13,7 @@ class Agent_11:
     def __init__(self,agent_id,model_checkpoint_file,load,learning=True,db_type="mysql") -> None:
         self.pp = pprint.PrettyPrinter(indent=4)
 
-        self.syntax_fixing_agent = Syntax_Fixing_Agent(agent_id,model_checkpoint_file,learning,load=load)
+        self.syntax_fixing_agent = Syntax_Fixing_Agent(agent_id,model_checkpoint_file,learning=learning,load=load)
         self.state_representation = State_Representation(db_type)
         self.last_game = None
         self.global_timestamp = 0
