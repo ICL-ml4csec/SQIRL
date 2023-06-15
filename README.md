@@ -125,7 +125,7 @@ SQIRL is also designed to run with a number of worker agents with a centralised 
 
 
 ```
-python3 Worker_DQN_RND_Server.py -u NUMBER_OF_CLIENTS
+python3 Worker_DQN_RND_Server.py -u NUMBER_OF_CLIENTS -model_dir path/to/saved/model
 ```
 Each of the worker agents can then be run from an alternative terminal following the instructions for the Centralised Agents:
 ```

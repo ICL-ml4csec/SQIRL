@@ -83,6 +83,10 @@ def main(stdscr):
                           help="SQIRL Variant: 0 for Random, 1 for DQN, 2 for DQN_RND, 3 for One_Hot_Encoder_DQN_RND, 4 for Worker_DQN_RND",
                           default=1)
 
+        parser.add_option( '--model_dir',
+                            action="store", dest="model_dir",
+                            help="Directory containing model checkpoints, if not set a new agent will begin training", default=None)
+
         parser.add_option('--training',
                           action="store", dest="train",
                           help="Boolean to set if SQIRL is in learning mode", default=False)
@@ -112,6 +116,7 @@ def main(stdscr):
             login_module = {'module_path':options.module_path, 'function':options.login_function }
 
         log_file = str(options.log_file)
+        model_dir = options.model_dir
         is_learning = bool(options.learning)
         no_episodes = int(options.episodes)
         max_timestamp = int(options.max_timestamp)
@@ -133,36 +138,40 @@ def main(stdscr):
         no_episodes = int(options.episodes) * num_inputs
         stdscr.addstr("Initialise Agent...")
         stdscr.refresh()
+        save_time = time.strftime("%Y-%m-%d_%H-%M-%S")
+
 
         # create instance of agent based on suplied agent type
         if agent_type == 0:#Random
             agent = Agent_Random(agent_unique_id)
         elif agent_type == 1:#DQN
-            model_checkpoint_file = os.path.join("/RL_Agent","Agents","DQN_Agent","Checkpoint")
+            model_checkpoint_file = os.path.join("/RL_Agent","Agents","DQN_Agent",f"Checkpoint-{save_time}")
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
-            agent = Agent_2(agent_unique_id,model_checkpoint_file,learning=is_learning)
+            agent = Agent_2(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
         elif agent_type == 2:#DQN_RND
-            model_checkpoint_file = os.path.join("/RL_Agent","Agents","DQN_RND_Agent","Checkpoint")
+            model_checkpoint_file = os.path.join("/RL_Agent","Agents","DQN_RND_Agent",f"Checkpoint-{save_time}")
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
-            agent = Agent_6(agent_unique_id,model_checkpoint_file,learning=is_learning)
+            agent = Agent_6(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
         elif agent_type == 3:#One_Hot_Encoder_DQN_RND
-            model_checkpoint_file = os.path.join("/RL_Agent","Agents","One_Hot_Encoder_DQN_RND_Agent","Checkpoint")
+            model_checkpoint_file = os.path.join("/RL_Agent","Agents","One_Hot_Encoder_DQN_RND_Agent",f"Checkpoint-{save_time}")
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
-            agent = Agent_9(agent_unique_id,model_checkpoint_file,learning=is_learning)
+            agent = Agent_9(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
         elif agent_type == 4:#Worker_DQN_RND
-            model_checkpoint_file = os.path.join("/RL_Agent","Agents","Worker_DQN_RND_Client","Checkpoint")
+            model_checkpoint_file = os.path.join("/RL_Agent","Agents","Worker_DQN_RND_Client",f"Checkpoint-{save_time}")
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
-            agent = Agent_11(agent_unique_id,model_checkpoint_file,learning=is_learning)
+            agent = Agent_11(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
         elif agent_type == 5:#One_Hot_Encoder_DQN_RND
-            model_checkpoint_file = os.path.join("/RL_Agent","Agents","One_Hot_Encoder_DQN_Agent","Checkpoint")
+            model_checkpoint_file = os.path.join("/RL_Agent","Agents","One_Hot_Encoder_DQN_Agent",f"Checkpoint-{save_time}")
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
-            agent = Agent_8(agent_unique_id,model_checkpoint_file,learning=is_learning)
+            agent = Agent_8(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
         else:
-            model_checkpoint_file = os.path.join("/RL_Agent","Agents","DQN_Agent","Checkpoint")
+            model_checkpoint_file = os.path.join("/RL_Agent","Agents","DQN_Agent",f"Checkpoint-{save_time}")
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
-            agent = Agent_2(agent_unique_id,model_checkpoint_file,learning=is_learning)
+            agent = Agent_2(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
 
-
+        stdscr.addstr(f'Model will be saved in {model_checkpoint_file}')
+        stdscr.refresh()
+        
         # get all_actions_dic
         all_actions = None
         q_value_all_actions = None
@@ -178,6 +187,14 @@ def main(stdscr):
         total_no_losses = 0
         trials = 0
         last_injection_win = None
+
+        env.reset(change_input=False)
+        domain = env.current_input_entry.input.action.split('/')[2]
+        os.makedirs(f'stats_logs/{domain}_{save_time}')
+        log_location = f'stats_logs/{domain}_{save_time}'
+        stdscr.addstr(f"Log output location: {log_location}")
+        stdscr.refresh()
+
         results_file = open(os.path.join("stats_logs",f"result_stats_{agent_unique_id}.stats"),"w+")
         results_file.close()
 
@@ -474,7 +491,7 @@ def main(stdscr):
             if ack != "ACK":
                 raise Exception(f"got responce {ack} FROM SERVER, should be ACK")
 
-
+    return log_location
 
             
 def send_msg(sock, msg):
@@ -516,8 +533,8 @@ def add_logo(stdscr):
 
 
 try:
-    wrapper(main)
-    print('SQIRL RUN COMPLETE, PLEASE CONSULT DIRECTORY: stats_logs')
+    log_output = wrapper(main)
+    print(f'SQIRL RUN COMPLETE, PLEASE CONSULT DIRECTORY: {log_output}')
 except Exception as e:
     endwin()
     print(e)

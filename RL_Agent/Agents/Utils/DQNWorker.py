@@ -20,7 +20,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 class DQNWorker:
     # server_host = '127.0.0.1'
     # server_port = 1234
-    def __init__(self,state_size,action_size,save_file_model,save_file_mem,name,server_host,server_port,learning=True) -> None:
+    def __init__(self,state_size,action_size,save_file_model,save_file_mem,name,server_host,server_port,load,learning=True) -> None:
         self.learning = learning
         self.BATCH_SIZE = 512
         self.GAMMA = 1
@@ -37,10 +37,12 @@ class DQNWorker:
         self.server_host = server_host
         self.server_port = server_port
 
-        self.memory = DQNWorker.load_mem(save_file_mem)
+        self.memory = DQNWorker.load_mem(load)
         if self.memory is None:
-
             self.memory = deque(maxlen=self.MEM_CAPACITY)
+
+        if not os.path.exists(save_file_model):
+            os.makedirs(save_file_model.split('Q_value.model')[0])
 
         self.optimizer = torch.optim.Adam(self.Q_value.parameters(), lr=self.learning_rate)
         self.loss_fn = torch.nn.SmoothL1Loss()
@@ -106,6 +108,7 @@ class DQNWorker:
         ClientSocket.close()
 
         return q_value
+
     def save_mem(self,curr_step):
         with open(self.save_dir_mem,"wb") as f:
             pickle.dump(self.memory,f)

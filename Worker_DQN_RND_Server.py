@@ -12,7 +12,7 @@ import sys
 from RL_Agent.Agents.Utils.Neural_Network import WorkerNeuralNetwork
 from RL_Agent.State_Representation.State_Representation import State_Representation
 import threading
-
+import re 
 __barrier = 0
 __finished_update = False
 clients = None
@@ -154,6 +154,7 @@ def update_paramters():
     global agents_paramters    
     global clients
 
+
     assert(len(agents_paramters) == get_clients())
     stored_data = copy.deepcopy(agents_paramters[0])
     # average all paramters
@@ -173,6 +174,8 @@ def update_paramters():
     neural_network.update_paramters(stored_data)
     neural_network.save_model(save_file_model)
 
+
+
     # remove agents parameters
     agents_paramters.clear()
 
@@ -191,11 +194,6 @@ def accept_connections(ServerSocket):
 
 if __name__ == "__main__":
     try:
-        # setup neural_network
-        neural_network = WorkerNeuralNetwork.load_model(save_file_model)
-        if neural_network is None:
-            print("No saved model. Initlize new Neural Network....")
-            neural_network = WorkerNeuralNetwork(state_size, action_size)
 
         # get paramter how many clients
         parser = optparse.OptionParser()
@@ -203,7 +201,28 @@ if __name__ == "__main__":
                 action="store", dest="clients",
                 help="number_of_clients", default=2)
 
+        parser.add_option('--model_dir',
+                action="store", dest="model_dir",
+                help="Directory containing model checkpoints, if not set a new agent will begin training", default=None)
+
         options, args = parser.parse_args()
+
+        # setup neural_network
+        try:
+            load_path = os.path.join(options.model_dir +'Q_value.model')
+        except:
+            load_path = None
+        neural_network = WorkerNeuralNetwork.load_model(load_path)
+        if neural_network is None:
+            print("No saved model. Initlize new Neural Network....")
+            neural_network = WorkerNeuralNetwork(state_size, action_size)
+
+        save_time = time.strftime("%Y-%m-%d_%H-%M-%S")
+        global save_file_model
+        save_file_model = re.sub('Checkpoint', f'Checkpoint-{save_time}')
+
+        print(f'Model will be saved in f{save_file_model}')
+
         set_clients(int(options.clients))
 
         # initiat socket

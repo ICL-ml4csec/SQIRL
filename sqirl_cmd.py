@@ -80,7 +80,11 @@ def main():
                           action="store", dest="agent_type",
                           help="SQIRL Variant: 0 for Random, 1 for DQN, 2 for DQN_RND, 3 for One_Hot_Encoder_DQN_RND, 4 for Worker_DQN_RND",
                           default=1)
-
+        
+        parser.add_option( '--model_dir',
+                            action="store", dest="model_dir",
+                            help="Directory containing model checkpoints, if not set a new agent will begin training", default=None)
+        
         parser.add_option('--training',
                           action="store", dest="train",
                           help="Boolean to set if SQIRL is in learning mode", default=False)
@@ -110,6 +114,7 @@ def main():
             login_module = {'module_path':options.module_path, 'function':options.login_function }
 
         log_file = str(options.log_file)
+        model_dir = options.model_dir
         is_learning = bool(options.learning)
         no_episodes = int(options.episodes)
         max_timestamp = int(options.max_timestamp)
@@ -129,34 +134,39 @@ def main():
         num_inputs = deepcopy(env.total_inputs)
         no_episodes = int(options.episodes) * num_inputs
         print("Initialise Agent...")
-
+        
+        save_time = time.strftime("%Y-%m-%d_%H-%M-%S")
+        
         # create instance of agent based on suplied agent type
-        if agent_type == 0:  # Random
+        if agent_type == 0:#Random
             agent = Agent_Random(agent_unique_id)
-        elif agent_type == 1:  # DQN
-            model_checkpoint_file = os.path.join("/RL_Agent", "Agents", "DQN_Agent", "Checkpoint")
+        elif agent_type == 1:#DQN
+            model_checkpoint_file = os.path.join("/RL_Agent","Agents","DQN_Agent",f"Checkpoint-{save_time}")
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
-            agent = Agent_2(agent_unique_id, model_checkpoint_file, learning=is_learning)
-        elif agent_type == 2:  # DQN_RND
-            model_checkpoint_file = os.path.join("/RL_Agent", "Agents", "DQN_RND_Agent", "Checkpoint")
+            agent = Agent_2(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
+        elif agent_type == 2:#DQN_RND
+            model_checkpoint_file = os.path.join("/RL_Agent","Agents","DQN_RND_Agent",f"Checkpoint-{save_time}")
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
-            agent = Agent_6(agent_unique_id, model_checkpoint_file, learning=is_learning)
-        elif agent_type == 3:  # One_Hot_Encoder_DQN_RND
-            model_checkpoint_file = os.path.join("/RL_Agent", "Agents", "One_Hot_Encoder_DQN_RND_Agent", "Checkpoint")
+            agent = Agent_6(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
+        elif agent_type == 3:#One_Hot_Encoder_DQN_RND
+            model_checkpoint_file = os.path.join("/RL_Agent","Agents","One_Hot_Encoder_DQN_RND_Agent",f"Checkpoint-{save_time}")
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
-            agent = Agent_9(agent_unique_id, model_checkpoint_file, learning=is_learning)
-        elif agent_type == 4:  # Worker_DQN_RND
-            model_checkpoint_file = os.path.join("/RL_Agent", "Agents", "Worker_DQN_RND_Client", "Checkpoint")
+            agent = Agent_9(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
+        elif agent_type == 4:#Worker_DQN_RND
+            model_checkpoint_file = os.path.join("/RL_Agent","Agents","Worker_DQN_RND_Client",f"Checkpoint-{save_time}")
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
-            agent = Agent_11(agent_unique_id, model_checkpoint_file, learning=is_learning)
-        elif agent_type == 5:  # One_Hot_Encoder_DQN
-            model_checkpoint_file = os.path.join("/RL_Agent", "Agents", "One_Hot_Encoder_DQN_Agent", "Checkpoint")
+            agent = Agent_11(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
+        elif agent_type == 5:#One_Hot_Encoder_DQN_RND
+            model_checkpoint_file = os.path.join("/RL_Agent","Agents","One_Hot_Encoder_DQN_Agent",f"Checkpoint-{save_time}")
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
-            agent = Agent_8(agent_unique_id, model_checkpoint_file, learning=is_learning)
+            agent = Agent_8(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
         else:
-            model_checkpoint_file = os.path.join("/RL_Agent", "Agents", "DQN_Agent", "Checkpoint")
+            model_checkpoint_file = os.path.join("/RL_Agent","Agents","DQN_Agent",f"Checkpoint-{save_time}")
             model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
-            agent = Agent_2(agent_unique_id, model_checkpoint_file, learning=is_learning)
+            agent = Agent_2(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
+
+        print(f'Model will be saved in {model_checkpoint_file}')
+       
 
         # get all_actions_dic
         all_actions = None
@@ -172,10 +182,17 @@ def main():
         total_no_losses = 0
         trials = 0
         last_injection_win = None
-        results_file = open(os.path.join("stats_logs", f"result_stats_{agent_unique_id}.stats"), "w+")
+        
+        env.reset(change_input=False)
+        domain = env.current_input_entry.input.action.split('/')[2]
+        os.makedirs(f'stats_logs/{domain}_{save_time}')
+        log_location = f'stats_logs/{domain}_{save_time}'
+        print(f"Log output location: {log_location}")
+
+        results_file = open(os.path.join(log_location, f"result_stats_{agent_unique_id}.stats"), "w+")
         results_file.close()
 
-        results_file = open(os.path.join("stats_logs", f"log_{agent_unique_id}.stats"), "w+")
+        results_file = open(os.path.join(log_location, f"log_{agent_unique_id}.stats"), "w+")
         results_file.close()
 
         total_wins = []
@@ -184,20 +201,20 @@ def main():
                          Game_Type.SANITIZATION_ESCAPING: {"action": [], "range": [], "type": []},
                          Game_Type.SYNTAX_FIXING: {"action": [], "range": [], "type": []}}
 
-        results_file = open(os.path.join("stats_logs", f"result_stats_{agent_unique_id}.stats"), "a")
+        results_file = open(os.path.join(log_location, f"result_stats_{agent_unique_id}.stats"), "a")
         results_file.write(f"---------------------Training-----------------\n")
         results_file.close()
 
-        results_file = open(os.path.join("stats_logs", f"timing_{agent_unique_id}.stats"), "a+")
+        results_file = open(os.path.join(log_location, f"timing_{agent_unique_id}.stats"), "a+")
         results_file.close()
 
-        results_file = open(os.path.join("stats_logs", f"actions_Applied_{agent_unique_id}.stats"), "w+")
+        results_file = open(os.path.join(log_location, f"actions_Applied_{agent_unique_id}.stats"), "w+")
         results_file.close()
 
-        sql_statment_file = open(os.path.join("stats_logs", f"sql_statment_{agent_unique_id}.stats"), "w+")
+        sql_statment_file = open(os.path.join(log_location, f"sql_statment_{agent_unique_id}.stats"), "w+")
         sql_statment_file.close()
 
-        results_file = open(os.path.join("stats_logs", f"rewards_{agent_unique_id}.stats"), "w+")
+        results_file = open(os.path.join(log_location, f"rewards_{agent_unique_id}.stats"), "w+")
         results_file.close()
         avg_time_taken = 0
 
@@ -205,7 +222,7 @@ def main():
         # playing loop
         for current_episode in range(no_episodes):
 
-            sql_statment_file = open(os.path.join("stats_logs", f"sql_statment_{agent_unique_id}.stats"), "a")
+            sql_statment_file = open(os.path.join(log_location, f"sql_statment_{agent_unique_id}.stats"), "a")
             sql_statment_file.write(f"---------------------ep{current_episode}-----------------\n")
             sql_statment_file.write(f"\n")
             sql_statment_file.close()
@@ -213,16 +230,16 @@ def main():
             # reset the environment to inilize to next input
             current_game, current_state = env.reset(change_input=reached_win_criteria or reached_loss_criteria)
 
-            stat_log_file = open(os.path.join("stats_logs", f"log_{agent_unique_id}.stats"), "a")
+            stat_log_file = open(os.path.join(log_location, f"log_{agent_unique_id}.stats"), "a")
             stat_log_file.write(f"\n\n---------------------ep{current_episode}-----------------\n")
             stat_log_file.write(f"[!] Input: {env.current_input_entry.input.action}\n")
             stat_log_file.close()
 
-            results_file = open(os.path.join("stats_logs", f"actions_Applied_{agent_unique_id}.stats"), "a")
+            results_file = open(os.path.join(log_location, f"actions_Applied_{agent_unique_id}.stats"), "a")
             results_file.write(f"---------------------ep{current_episode}-----------------\n")
             results_file.close()
             if current_episode == 0:
-                results_file = open(os.path.join("stats_logs", f"result_stats_{agent_unique_id}.stats"), "a")
+                results_file = open(os.path.join(log_location, f"result_stats_{agent_unique_id}.stats"), "a")
                 results_file.write(
                     f"[!] Starting to input {[param['name'] for param in env.current_input_entry.input.inputs if param['input_use'] == 'injection_point'][0]},{env.current_input_entry.input.action}\n")
                 results_file.close()
@@ -231,11 +248,11 @@ def main():
                                                                     param['input_use'] == 'injection_point']
 
             elif (reached_win_criteria or reached_loss_criteria):
-                results_file = open(os.path.join("stats_logs", f"result_stats_{agent_unique_id}.stats"), "a")
+                results_file = open(os.path.join(log_location, f"result_stats_{agent_unique_id}.stats"), "a")
                 results_file.write(
                     f"[!] Changing to input {[param['name'] for param in env.current_input_entry.input.inputs if param['input_use'] == 'injection_point'][0]},{env.current_input_entry.input.action}\n")
                 results_file.close()
-                stat_log_file = open(os.path.join("stats_logs", f"log_{agent_unique_id}.stats"), "a")
+                stat_log_file = open(os.path.join(log_location, f"log_{agent_unique_id}.stats"), "a")
                 stat_log_file.write(
                     f"[!] CHANGING TO: {[param['name'] for param in env.current_input_entry.input.inputs if param['input_use'] == 'injection_point'][0]},{env.current_input_entry.input.action}\n")
                 stat_log_file.close()
@@ -253,7 +270,7 @@ def main():
                                                                         env.current_input_entry.input.inputs if
                                                                         param['input_use'] == 'injection_point']
 
-            sql_statment_file = open(os.path.join("stats_logs", f"sql_statment_{agent_unique_id}.stats"), "a")
+            sql_statment_file = open(os.path.join(log_location, f"sql_statment_{agent_unique_id}.stats"), "a")
             if current_state['error']:
                 sql_statment_file.write(f"Base: None\n")
             else:
@@ -267,7 +284,7 @@ def main():
 
             # reset env to for next targeted input state
             if reached_win_criteria or reached_loss_criteria:
-                results_file = open(os.path.join("stats_logs", f"result_stats_{agent_unique_id}.stats"), "a")
+                results_file = open(os.path.join(log_location, f"result_stats_{agent_unique_id}.stats"), "a")
                 reached_win_criteria = False
                 reached_loss_criteria = False
                 current_wins = 0
@@ -299,18 +316,18 @@ def main():
 
                 # perform action and get next state and reward
                 current_game, current_state, reward, game_done = env.step(selected_action)
-                results_file = open(os.path.join("stats_logs", f"actions_Applied_{agent_unique_id}.stats"), "a")
+                results_file = open(os.path.join(log_location, f"actions_Applied_{agent_unique_id}.stats"), "a")
                 results_file.write(f'{current_time_stamp}: {current_state["payload"]}\n')
                 results_file.write(f"\n")
                 results_file.close()
 
-                stat_log_file = open(os.path.join("stats_logs", f"log_{agent_unique_id}.stats"), "a")
+                stat_log_file = open(os.path.join(log_location, f"log_{agent_unique_id}.stats"), "a")
                 stat_log_file.write(f"{current_time_stamp}:Payload: {current_state['payload']}\n")
                 stat_log_file.write(f"{current_time_stamp}:Available actions: {current_state['actions']}\n")
                 stat_log_file.write(f"{current_time_stamp}:CURRENT GAME: {current_state['game']}\n")
                 stat_log_file.close()
 
-                sql_statment_file = open(os.path.join("stats_logs", f"sql_statment_{agent_unique_id}.stats"), "a")
+                sql_statment_file = open(os.path.join(log_location, f"sql_statment_{agent_unique_id}.stats"), "a")
                 if current_state['error']:
                     sql_statment_file.write(f"{current_time_stamp}: None\n")
                 else:
@@ -318,7 +335,7 @@ def main():
                 sql_statment_file.write(f"\n")
                 sql_statment_file.close()
 
-                stat_log_file = open(os.path.join("stats_logs", f"log_{agent_unique_id}.stats"), "a")
+                stat_log_file = open(os.path.join(log_location, f"log_{agent_unique_id}.stats"), "a")
                 if current_state['error']:
                     stat_log_file.write(f"SQL EXECUTED: None\n")
                 else:
@@ -372,12 +389,12 @@ def main():
             else:
                 avg_time_taken += time_taken
                 avg_time_taken /= 2
-            results_file = open(os.path.join("stats_logs", f"timing_{agent_unique_id}.stats"), "a")
+            results_file = open(os.path.join(log_location, f"timing_{agent_unique_id}.stats"), "a")
             results_file.write(f"{time_taken}\n")
             results_file.close()
 
             # update win and loss criteria and trials
-            results_file = open(os.path.join("stats_logs", f"rewards_{agent_unique_id}.stats"), "a")
+            results_file = open(os.path.join(log_location, f"rewards_{agent_unique_id}.stats"), "a")
             results_file.write(f"{np.sum(agent.reward_value)}\n")
             results_file.close()
 
@@ -386,7 +403,7 @@ def main():
                 last_injection_win = current_state['sql']
                 current_wins += 1
                 total_no_wins += 1
-                results_file = open(os.path.join("stats_logs", f"result_stats_{agent_unique_id}.stats"), "a")
+                results_file = open(os.path.join(log_location, f"result_stats_{agent_unique_id}.stats"), "a")
                 results_file.write(
                     f"ep {current_episode}: current game wins {current_wins} with {current_time_stamp} timestamps and reward {agent.reward_value} = {np.sum(agent.reward_value)}\n")
                 results_file.write(f"sql {current_state['sql']}\n")
@@ -404,7 +421,7 @@ def main():
             if max_timestamp_reached and not game_done:
                 current_losses += 1
                 total_no_losses += 1
-                results_file = open(os.path.join("stats_logs", f"result_stats_{agent_unique_id}.stats"), "a")
+                results_file = open(os.path.join(log_location, f"result_stats_{agent_unique_id}.stats"), "a")
                 results_file.write(
                     f"ep {current_episode}: current game lost {current_losses} with {current_time_stamp} timestamps\n")
                 results_file.close()
@@ -418,14 +435,14 @@ def main():
                 # state reporting
                 stat_report.append({"reached_win": True, "reached_loss": False, "trials": trials, "wins": current_wins,
                                     "losses": current_losses})
-                results_file = open(os.path.join("stats_logs", f"result_stats_{agent_unique_id}.stats"), "a")
+                results_file = open(os.path.join(log_location, f"result_stats_{agent_unique_id}.stats"), "a")
                 results_file.write(f"[!] reached win criteria\n")
                 results_file.write(f"[!] payload: {current_state['payload']}\n")
                 results_file.write(f"[!] URL: {env.current_input_entry.input.action}\n")
                 results_file.write(
                     f"[!] Parameter: {[param['name'] for param in env.current_input_entry.input.inputs if param['input_use'] == 'injection_point'][0]}\n\n")
                 results_file.close()
-                stat_log_file = open(os.path.join("stats_logs", f"log_{agent_unique_id}.stats"), "a")
+                stat_log_file = open(os.path.join(log_location, f"log_{agent_unique_id}.stats"), "a")
                 stat_log_file.write(f"[!] WIN CRITERA\n")
                 stat_log_file.close()
 
@@ -435,10 +452,10 @@ def main():
                 # state reporting
                 stat_report.append({"reached_win": False, "reached_loss": True, "trials": trials, "wins": current_wins,
                                     "losses": current_losses})
-                results_file = open(os.path.join("stats_logs", f"result_stats_{agent_unique_id}.stats"), "a")
+                results_file = open(os.path.join(log_location, f"result_stats_{agent_unique_id}.stats"), "a")
                 results_file.write(f"[!] reached loss criteria\n\n")
                 results_file.close()
-                stat_log_file = open(os.path.join("stats_logs", f"log_{agent_unique_id}.stats"), "a")
+                stat_log_file = open(os.path.join(log_location, f"log_{agent_unique_id}.stats"), "a")
                 stat_log_file.write(f"[!] LOSS CRITERA\n")
                 stat_log_file.close()
 

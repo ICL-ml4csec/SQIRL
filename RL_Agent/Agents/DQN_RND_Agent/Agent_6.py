@@ -10,10 +10,10 @@ class Agent_6:
           "remove_token","convert AND to &", "add null byte to quote"]
     idx_to_action_map = {i:curr_action for i,curr_action in enumerate(actions)}
     action_to_idx_map = {curr_action:i for i,curr_action in enumerate(actions)}
-    def __init__(self,agent_id,model_checkpoint_file,learning=True,db_type="mysql") -> None:
+    def __init__(self,agent_id,model_checkpoint_file,load,learning=True,db_type="mysql") -> None:
         self.pp = pprint.PrettyPrinter(indent=4)
 
-        self.syntax_fixing_agent = Syntax_Fixing_Agent(agent_id,model_checkpoint_file,learning)
+        self.syntax_fixing_agent = Syntax_Fixing_Agent(agent_id,model_checkpoint_file,learning,load=load)
         self.state_representation = State_Representation(db_type)
         self.last_game = None
         self.global_timestamp = 0

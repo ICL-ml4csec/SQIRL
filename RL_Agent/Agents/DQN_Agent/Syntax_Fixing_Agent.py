@@ -7,7 +7,7 @@ from RL_Agent.Agents.Utils.DQN import DQN
 import os
 from RL_Agent.State_Representation.State_Representation import State_Representation
 class Syntax_Fixing_Agent:
-    def __init__(self,learning,model_checkpoint_file) -> None:
+    def __init__(self,learning,model_checkpoint_file, load) -> None:
         # whether to update the q values or not
         self.learning = learning
 
@@ -16,7 +16,7 @@ class Syntax_Fixing_Agent:
         # output size is 1
         q_value_file = os.path.join(model_checkpoint_file,"Q_value.model")
         q_value_file_mem = os.path.join(model_checkpoint_file,"Q_value.mem")
-        self.action_Q_value = DQN(State_Representation.size()+5,1,q_value_file,q_value_file_mem,"syntax_fixing_action")
+        self.action_Q_value = DQN(State_Representation.size()+5,1,q_value_file,q_value_file_mem,"syntax_fixing_action", load=load)
 
         self.epsilon = 0.7
         self.decay_rate = 0.9999
