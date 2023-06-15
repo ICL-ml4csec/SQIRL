@@ -195,31 +195,31 @@ def main(stdscr):
         stdscr.addstr(f"Log output location: {log_location}")
         stdscr.refresh()
 
-        results_file = open(os.path.join("stats_logs",f"result_stats_{agent_unique_id}.stats"),"w+")
+        results_file = open(os.path.join(log_location,f"result_stats_{agent_unique_id}.stats"),"w+")
         results_file.close()
 
 
-        results_file = open(os.path.join("stats_logs",f"log_{agent_unique_id}.stats"),"w+")
+        results_file = open(os.path.join(log_location,f"log_{agent_unique_id}.stats"),"w+")
         results_file.close()
 
         total_wins = []
         
         training_loss = {Game_Type.BEHAVIOR_CHANGING:{"action":[],"range":[],"type":[]},Game_Type.SANITIZATION_ESCAPING:{"action":[],"range":[],"type":[]},Game_Type.SYNTAX_FIXING:{"action":[],"range":[],"type":[]}}
         
-        results_file = open(os.path.join("stats_logs",f"result_stats_{agent_unique_id}.stats"),"a")
+        results_file = open(os.path.join(log_location,f"result_stats_{agent_unique_id}.stats"),"a")
         results_file.write(f"---------------------Training-----------------\n")
         results_file.close()
         
-        results_file = open(os.path.join("stats_logs",f"timing_{agent_unique_id}.stats"),"a+")
+        results_file = open(os.path.join(log_location,f"timing_{agent_unique_id}.stats"),"a+")
         results_file.close()
         
-        results_file = open(os.path.join("stats_logs",f"actions_Applied_{agent_unique_id}.stats"),"w+")
+        results_file = open(os.path.join(log_location,f"actions_Applied_{agent_unique_id}.stats"),"w+")
         results_file.close()  
         
-        sql_statment_file = open(os.path.join("stats_logs",f"sql_statment_{agent_unique_id}.stats"),"w+")
+        sql_statment_file = open(os.path.join(log_location,f"sql_statment_{agent_unique_id}.stats"),"w+")
         sql_statment_file.close()
 
-        results_file = open(os.path.join("stats_logs",f"rewards_{agent_unique_id}.stats"),"w+")
+        results_file = open(os.path.join(log_location,f"rewards_{agent_unique_id}.stats"),"w+")
         results_file.close()
         avg_time_taken = 0
 
@@ -230,7 +230,7 @@ def main(stdscr):
 
 
 
-            sql_statment_file = open(os.path.join("stats_logs",f"sql_statment_{agent_unique_id}.stats"),"a")
+            sql_statment_file = open(os.path.join(log_location,f"sql_statment_{agent_unique_id}.stats"),"a")
             sql_statment_file.write(f"---------------------ep{current_episode}-----------------\n")
             sql_statment_file.write(f"\n")
             sql_statment_file.close()     
@@ -238,24 +238,24 @@ def main(stdscr):
             # reset the environment to inilize to next input
             current_game , current_state = env.reset(change_input=reached_win_criteria or reached_loss_criteria)
 
-            stat_log_file = open(os.path.join("stats_logs",f"log_{agent_unique_id}.stats"),"a")
+            stat_log_file = open(os.path.join(log_location,f"log_{agent_unique_id}.stats"),"a")
             stat_log_file.write(f"\n\n---------------------ep{current_episode}-----------------\n")
             stat_log_file.write(f"[!] Input: {env.current_input_entry.input.action}\n")
             stat_log_file.close()
 
 
-            results_file = open(os.path.join("stats_logs",f"actions_Applied_{agent_unique_id}.stats"),"a")
+            results_file = open(os.path.join(log_location,f"actions_Applied_{agent_unique_id}.stats"),"a")
             results_file.write(f"---------------------ep{current_episode}-----------------\n")
             results_file.close()
             if current_episode == 0:
-                results_file = open(os.path.join("stats_logs", f"result_stats_{agent_unique_id}.stats"), "a")
+                results_file = open(os.path.join(log_location, f"result_stats_{agent_unique_id}.stats"), "a")
                 results_file.write(f"[!] Starting to input {[param['name'] for param in env.current_input_entry.input.inputs if param['input_use'] == 'injection_point'][0]},{env.current_input_entry.input.action}\n")
                 results_file.close()
             elif (reached_win_criteria or reached_loss_criteria):
-                results_file = open(os.path.join("stats_logs", f"result_stats_{agent_unique_id}.stats"), "a")
+                results_file = open(os.path.join(log_location, f"result_stats_{agent_unique_id}.stats"), "a")
                 results_file.write(f"[!] Changing to input {[param['name'] for param in env.current_input_entry.input.inputs if param['input_use'] == 'injection_point'][0]},{env.current_input_entry.input.action}\n")
                 results_file.close()
-                stat_log_file = open(os.path.join("stats_logs", f"log_{agent_unique_id}.stats"), "a")
+                stat_log_file = open(os.path.join(log_location, f"log_{agent_unique_id}.stats"), "a")
                 stat_log_file.write(f"[!] CHANGING TO: {[param['name'] for param in env.current_input_entry.input.inputs if param['input_use'] == 'injection_point'][0]},{env.current_input_entry.input.action}\n")
                 stat_log_file.close()
                 if env.current_input_entry.input.action in seen_pairs:
@@ -267,7 +267,7 @@ def main(stdscr):
                     seen_pairs[env.current_input_entry.input.action] = [param['name'] for param in env.current_input_entry.input.inputs if param['input_use'] == 'injection_point']
 
 
-            sql_statment_file = open(os.path.join("stats_logs",f"sql_statment_{agent_unique_id}.stats"),"a")
+            sql_statment_file = open(os.path.join(log_location,f"sql_statment_{agent_unique_id}.stats"),"a")
             if current_state['error']:
                 sql_statment_file.write(f"Base: None\n")
             else:
@@ -281,7 +281,7 @@ def main(stdscr):
 
             # reset env to for next targeted input state
             if reached_win_criteria or reached_loss_criteria:
-                results_file = open(os.path.join("stats_logs",f"result_stats_{agent_unique_id}.stats"),"a")
+                results_file = open(os.path.join(log_location,f"result_stats_{agent_unique_id}.stats"),"a")
                 reached_win_criteria = False
                 reached_loss_criteria = False
                 current_wins = 0
@@ -310,18 +310,18 @@ def main(stdscr):
 
                 # perform action and get next state and reward
                 current_game, current_state, reward, game_done = env.step(selected_action)
-                results_file = open(os.path.join("stats_logs",f"actions_Applied_{agent_unique_id}.stats"),"a")
+                results_file = open(os.path.join(log_location,f"actions_Applied_{agent_unique_id}.stats"),"a")
                 results_file.write(f'{current_time_stamp}: {current_state["payload"]}\n')
                 results_file.write(f"\n")
                 results_file.close()
 
-                stat_log_file = open(os.path.join("stats_logs", f"log_{agent_unique_id}.stats"), "a")
+                stat_log_file = open(os.path.join(log_location, f"log_{agent_unique_id}.stats"), "a")
                 stat_log_file.write(f"{current_time_stamp}:Payload: {current_state['payload']}\n")
                 stat_log_file.write(f"{current_time_stamp}:Available actions: {current_state['actions']}\n")
                 stat_log_file.write(f"{current_time_stamp}:CURRENT GAME: {current_state['game']}\n")
                 stat_log_file.close()
 
-                sql_statment_file = open(os.path.join("stats_logs",f"sql_statment_{agent_unique_id}.stats"),"a")
+                sql_statment_file = open(os.path.join(log_location,f"sql_statment_{agent_unique_id}.stats"),"a")
                 if current_state['error']:
                     sql_statment_file.write(f"{current_time_stamp}: None\n")
                 else:
@@ -329,7 +329,7 @@ def main(stdscr):
                 sql_statment_file.write(f"\n")
                 sql_statment_file.close()
 
-                stat_log_file = open(os.path.join("stats_logs", f"log_{agent_unique_id}.stats"), "a")
+                stat_log_file = open(os.path.join(log_location, f"log_{agent_unique_id}.stats"), "a")
                 if current_state['error']:
                     stat_log_file.write(f"SQL EXECUTED: None\n")
                 else:
@@ -397,12 +397,12 @@ def main(stdscr):
             else:
                 avg_time_taken += time_taken
                 avg_time_taken /= 2
-            results_file = open(os.path.join("stats_logs",f"timing_{agent_unique_id}.stats"),"a")
+            results_file = open(os.path.join(log_location,f"timing_{agent_unique_id}.stats"),"a")
             results_file.write(f"{time_taken}\n")
             results_file.close()
 
             # update win and loss criteria and trials
-            results_file = open(os.path.join("stats_logs",f"rewards_{agent_unique_id}.stats"),"a")
+            results_file = open(os.path.join(log_location,f"rewards_{agent_unique_id}.stats"),"a")
             results_file.write(f"{np.sum(agent.reward_value)}\n")
             results_file.close()
 
@@ -412,7 +412,7 @@ def main(stdscr):
                 last_injection_win = current_state['sql']
                 current_wins += 1
                 total_no_wins += 1
-                results_file = open(os.path.join("stats_logs",f"result_stats_{agent_unique_id}.stats"),"a")
+                results_file = open(os.path.join(log_location,f"result_stats_{agent_unique_id}.stats"),"a")
                 results_file.write(f"ep {current_episode}: current game wins {current_wins} with {current_time_stamp} timestamps and reward {agent.reward_value} = {np.sum(agent.reward_value)}\n")
                 results_file.write(f"sql {current_state['sql']}\n")
 
@@ -425,7 +425,7 @@ def main(stdscr):
             if max_timestamp_reached and not game_done:
                 current_losses += 1
                 total_no_losses += 1
-                results_file = open(os.path.join("stats_logs",f"result_stats_{agent_unique_id}.stats"),"a")
+                results_file = open(os.path.join(log_location,f"result_stats_{agent_unique_id}.stats"),"a")
                 results_file.write(f"ep {current_episode}: current game lost {current_losses} with {current_time_stamp} timestamps\n")
                 results_file.close()
                 total_wins.append(0)
@@ -437,13 +437,13 @@ def main(stdscr):
                 reached_win_criteria = True
                 # state reporting
                 stat_report.append({"reached_win":True,"reached_loss":False,"trials":trials,"wins":current_wins,"losses":current_losses})
-                results_file = open(os.path.join("stats_logs",f"result_stats_{agent_unique_id}.stats"),"a")
+                results_file = open(os.path.join(log_location,f"result_stats_{agent_unique_id}.stats"),"a")
                 results_file.write(f"[!] reached win criteria\n")
                 results_file.write(f"[!] payload: {current_state['payload']}\n")
                 results_file.write(f"[!] URL: {env.current_input_entry.input.action}\n")
                 results_file.write(f"[!] Parameter: {[param['name'] for param in env.current_input_entry.input.inputs if param['input_use'] == 'injection_point'][0]}\n\n")
                 results_file.close()
-                stat_log_file = open(os.path.join("stats_logs", f"log_{agent_unique_id}.stats"), "a")
+                stat_log_file = open(os.path.join(log_location, f"log_{agent_unique_id}.stats"), "a")
                 stat_log_file.write(f"[!] WIN CRITERA\n")
                 stat_log_file.close()
 
@@ -453,10 +453,10 @@ def main(stdscr):
                 reached_loss_criteria = True 
                 # state reporting
                 stat_report.append({"reached_win":False,"reached_loss":True,"trials":trials,"wins":current_wins,"losses":current_losses})
-                results_file = open(os.path.join("stats_logs",f"result_stats_{agent_unique_id}.stats"),"a")
+                results_file = open(os.path.join(log_location,f"result_stats_{agent_unique_id}.stats"),"a")
                 results_file.write(f"[!] reached loss criteria\n\n")
                 results_file.close()
-                stat_log_file = open(os.path.join("stats_logs", f"log_{agent_unique_id}.stats"), "a")
+                stat_log_file = open(os.path.join(log_location, f"log_{agent_unique_id}.stats"), "a")
                 stat_log_file.write(f"[!] LOSS CRITERA\n")
                 stat_log_file.close()
 
