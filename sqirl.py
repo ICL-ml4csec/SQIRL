@@ -80,8 +80,8 @@ def main(stdscr):
 
         parser.add_option('--agent',
                           action="store", dest="agent_type",
-                          help="SQIRL Variant: 0 for Random, 1 for DQN, 2 for DQN_RND, 3 for One_Hot_Encoder_DQN_RND, 4 for Worker_DQN_RND",
-                          default=1)
+                          help="SQIRL Variant: 0 for Random, 1 for DQN (DEFAULT), 2 for DQN_RND, 3 for One_Hot_Encoder_DQN_RND, 4 for Worker_DQN_RND.",
+                          default=None)
 
         parser.add_option( '--model_dir',
                             action="store", dest="model_dir",
@@ -114,7 +114,11 @@ def main(stdscr):
             raise Exception("If using authentication both --login_function_name and --auth_file_path must be set.")
         else:
             login_module = {'module_path':options.module_path, 'function':options.login_function }
-
+  
+        if options.model_dir != None and options.agent_type != None or \
+            options.model_dir == None and options.agent_type == None:
+            raise Exception("Please set only one of --model_dir (if you want to load a previous model), or '--agent if you wish to train a new agent")
+  
         log_file = str(options.log_file)
         model_dir = options.model_dir
         is_learning = bool(options.learning)
@@ -126,7 +130,7 @@ def main(stdscr):
         sql_proxy_input = (db_type,log_file)
         agent_unique_id = str(options.agent_unique_id)
         input_selection = int(options.input_selection)
-        agent_type = int(options.agent_type)
+        agent_type = int(options.agent_type) if options.agent_type != None else -1
         add_logo(stdscr)
         stdscr.addstr("Initialise Environment...\n")
         stdscr.refresh()
@@ -138,31 +142,51 @@ def main(stdscr):
         no_episodes = int(options.episodes) * num_inputs
         stdscr.addstr("Initialise Agent...")
         stdscr.refresh()
+        
         save_time = time.strftime("%Y-%m-%d_%H-%M-%S")
-
-
-        # create instance of agent based on suplied agent type
+        domain = env.current_input_entry.input.action.split('/')[2]
+        os.makedirs(f'stats_logs/{domain}_{save_time}')
+        log_location = f'stats_logs/{domain}_{save_time}'
+        os.rename("./stats_logs/all_inputs_found.stat",f"./{log_location}/all_inputs_found.stat")
+        stdscr.addstr(f"Log output location: {os.path.abspath(os.path.join(os.getcwd(), log_location))}")
+        
+        # create instance of agent based on supplied agent type
         if agent_type == 0:#Random
             agent = Agent_Random(agent_unique_id)
-        elif agent_type == 1:#DQN
-            model_checkpoint_file = os.path.join("/RL_Agent","Agents","DQN_Agent",f"Checkpoint-{save_time}")
-            model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
+        elif agent_type == 1 or (model_dir is not None and 'DQN_Agent' in model_dir):#DQN
+            if model_dir is None:
+                model_dir = os.path.join("/RL_Agent","pretrained_agents","DQN_Agent")
+                model_dir = os.path.abspath(s.getcwd() + model_checkpoint_file)
+            model_checkpoint_file = os.path.join(os.getcwd(), log_location,"DQN_Agent_Checkpoint")
+            model_checkpoint_file = os.path.abspath(model_checkpoint_file)
             agent = Agent_2(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
-        elif agent_type == 2:#DQN_RND
-            model_checkpoint_file = os.path.join("/RL_Agent","Agents","DQN_RND_Agent",f"Checkpoint-{save_time}")
-            model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
+        elif agent_type == 2 or (model_dir is not None and 'DQN_RND_Agent' in model_dir):#DQN_RND
+            if model_dir is None:
+                model_dir = os.path.join("/RL_Agent","pretrained_agents","DQN_RND_Agent")
+                model_dir = os.path.abspath(s.getcwd() + model_checkpoint_file)
+            model_checkpoint_file = os.path.join(os.getcwd(), log_location,"DQN_RND_Agent_Checkpoint")
+            model_checkpoint_file = os.path.abspath(model_checkpoint_file)
             agent = Agent_6(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
-        elif agent_type == 3:#One_Hot_Encoder_DQN_RND
-            model_checkpoint_file = os.path.join("/RL_Agent","Agents","One_Hot_Encoder_DQN_Agent",f"Checkpoint-{save_time}")
-            model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
+        elif agent_type == 3 or (model_dir is not None and 'One_Hot_Encoder_DQN_Agent' in model_dir):#One_Hot_Encoder_DQN_RND
+            if model_dir is None:
+                model_dir = os.path.join("/RL_Agent","pretrained_agents","One_Hot_Encoder_DQN_Agent")
+                model_dir = os.path.abspath(s.getcwd() + model_checkpoint_file)
+            model_checkpoint_file = os.path.join(os.getcwd(), log_location,"One_Hot_Encoder_DQN_Agent_Checkpoint")
+            model_checkpoint_file = os.path.abspath(model_checkpoint_file)
             agent = Agent_8(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
-        elif agent_type == 4:#Worker_DQN_RND
-            model_checkpoint_file = os.path.join("/RL_Agent","Agents","Worker_DQN_RND_Client",f"Checkpoint-{save_time}")
-            model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
+        elif agent_type == 4 or (model_dir is not None and 'Worker_DQN_RND_Client 'in model_dir):#Worker_DQN_RND
+            if model_dir is None:
+                model_dir = os.path.join("/RL_Agent","pretrained_agents","Worker_DQN_RND_Client")
+                model_dir = os.path.abspath(s.getcwd() + model_checkpoint_file)
+            model_checkpoint_file = os.path.join(os.getcwd(), log_location,"Worker_DQN_RND_Client_Checkpoint")
+            model_checkpoint_file = os.path.abspath(model_checkpoint_file)
             agent = Agent_11(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
         else:
-            model_checkpoint_file = os.path.join("/RL_Agent","Agents","DQN_Agent",f"Checkpoint-{save_time}")
-            model_checkpoint_file = os.path.abspath(os.getcwd() + model_checkpoint_file)
+            if model_dir is None:
+                model_dir = os.path.join("/RL_Agent","pretrained_agents","DQN_Agent")
+                model_dir = os.path.abspath(s.getcwd() + model_checkpoint_file)
+            model_checkpoint_file = os.path.join(os.getcwd(), log_location,"DQN_Agent_Checkpoint")
+            model_checkpoint_file = os.path.abspath(model_checkpoint_file)
             agent = Agent_2(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
 
         stdscr.addstr(f'Model will be saved in {model_checkpoint_file}')
@@ -183,13 +207,6 @@ def main(stdscr):
         total_no_losses = 0
         trials = 0
         last_injection_win = None
-
-        env.reset(change_input=False)
-        domain = env.current_input_entry.input.action.split('/')[2]
-        os.makedirs(f'stats_logs/{domain}_{save_time}')
-        log_location = f'stats_logs/{domain}_{save_time}'
-        stdscr.addstr(f"Log output location: {log_location}")
-        stdscr.refresh()
 
         results_file = open(os.path.join(log_location,f"result_stats_{agent_unique_id}.stats"),"w+")
         results_file.close()
