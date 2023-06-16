@@ -17,7 +17,7 @@
 \__ \| (_) || |__ | |  \ \/\/ / | _| | _ \\__ \| _| |   / \ V /  | _| |   /  
 |___/ \__\_\|____||_|   \_/\_/  |___||___/|___/|___||_|_\  \_/   |___||_|_\  
         </pre>
-        <h4>A deliberately vulnerable web application containing 15 different examples of SQLI.</h4>
+        <h4>A deliberately vulnerable web application containing 30 different examples of SQLI.</h4>
         <!-- <pre>
                              .-"""""-.
                             /\ /\ /\ /\
@@ -94,7 +94,7 @@
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'  `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
 </pre>
 <h2>Query Feedback on page. Non-Vulnerable.</h2>
-<h3>Tasks 1 - 10. These input fields include a variety of different SQL statements to exploit, without any sanitation to user inputs. </h3>
+<h3>Tasks 1 - 13. These input fields include a variety of different SQL statements to exploit, without any sanitation to user inputs. </h3>
 
 
 <pre>
@@ -410,8 +410,6 @@
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
     </pre>
-        <h1>Test on realworld CVEs</h2>
-    <h3>Tasks 20 - 25. These input fields include a variety of different SQL statements to exploit that are pulled from real world CVEs. </h3>
 
         <h2> Task 20</h2>
 
@@ -429,6 +427,9 @@
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
     </pre>
+            <h1>Test on realworld CVEs</h2>
+    <h3>Tasks 21 - 25. These input fields include a variety of different SQL statements to exploit that are pulled from real world CVEs. </h3>
+
         <h2> Task 21 - CVE-2020-8637</h2>
 
 

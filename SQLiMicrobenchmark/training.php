@@ -17,7 +17,7 @@
 \__ \| (_) || |__ | |  \ \/\/ / | _| | _ \\__ \| _| |   / \ V /  | _| |   /
 |___/ \__\_\|____||_|   \_/\_/  |___||___/|___/|___||_|_\  \_/   |___||_|_\
         </pre>
-        <h4>A deliberately vulnerable web application containing 15 different examples of SQLI.</h4>
+        <h4>A deliberately vulnerable web application containing 20 different examples of SQLI.</h4>
 		<!-- <pre>
                              .-"""""-.
                             /\ /\ /\ /\
@@ -87,14 +87,14 @@
             }
         ?>
 		<!--  -->
-		<!-- inputs to be inserted -->
 		<!--  -->
     <pre>
 .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
 / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'  `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
 </pre>
-<h2>Test Context Escape - No feedback</h2>
+<h2>SQL injection training page.</h2>
+<h3>Tasks 1 - 13. These input fields include a variety of different SQL statements to exploit, without any sanitation to user inputs. </h3>
 <pre>
 .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
 / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ 
@@ -102,12 +102,12 @@
 </pre>
 <h2> Task 1</h2>
 
-<!-- select -->
+
  <form action="functions_external/sqli1.php" method="get">
   ID <input type="text" name="id"></br></br>
               <input type="hidden" name="difficulty" id="difficulty" value="None">
 
-              Feedback
+              
   Submit Request: <button type="submit">Go</button>
 </form>
 
@@ -122,11 +122,11 @@
     <h2> Task 2</h2>
 
 
-        <!-- select -->
+        
         <form action="functions_external/sqli2.php" method="get">
             Name <input type="text" name="name"></br></br>
             <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
+            
             Submit Request: <button type="submit">Go</button>
         </form>
     <pre>
@@ -136,12 +136,11 @@
     </pre>
     <h2> Task 3</h2>
 
-        <!-- update statement -->
     <form action="functions_external/sqli3.php" method="post">
             Password <input type="text" name="pass"></br></br>
               <input type="hidden" name="difficulty" id="difficulty" value="None">
 
-            Feedback
+            
             Submit Request: <button type="submit">Update</button>
         </form> 
     <pre>
@@ -152,11 +151,11 @@
     <h2> Task 4</h2>
 
 
-        <!-- insert -->
          <form action="functions_external/sqli4.php" method="post">
             Name <input type="text" name="name"></br></br>
+            
             <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
+            
             Submit Request: <button type="submit">Create</button>
         </form>
     <pre>
@@ -167,12 +166,12 @@
   <h2> Task 5</h2>
 
 
-<!-- select -->
+
  <form action="functions_external/sqli5.php" method="get">
   Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="None">
-        Feedback
+        
   Submit Request: <button type="submit">Go</button>
 </form>
 
@@ -185,12 +184,12 @@
   <h2> Task 6</h2>
 
 
-<!-- select -->
+
  <form action="functions_external/sqli6.php" method="get">
   Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
+            
   Submit Request: <button type="submit">Go</button>
 </form>
 
@@ -202,12 +201,12 @@
   <h2> Task 7 </h2>
 
 
-  <!-- select -->
+  
    <form action="functions_external/sqli7.php" method="get">
     Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
+            
     Submit Request: <button type="submit">Go</button>
   </form>
     <pre>
@@ -218,12 +217,12 @@
     <h2> Task 8</h2>
 
 
-<!-- select -->
+
  <form action="functions_external/sqli8.php" method="get">
   Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
+            
   Submit Request: <button type="submit">Go</button>
 </form>
     <pre>
@@ -234,12 +233,12 @@
   <h2> Task 9</h2>
 
 
-  <!-- select -->
+  
    <form action="functions_external/sqli9.php" method="get">
-    Name <input type="text" name="id">
+    Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
+            
     Submit Request: <button type="submit">Go</button>
   </form>
   <pre>
@@ -250,36 +249,27 @@
   <h2> Task 10</h2>
 
 
-  <!-- select -->
+  
    <form action="functions_external/sqli10.php" method="get">
     Name <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
+            
     Submit Request: <button type="submit">Go</button>
   </form>
-<pre>
-
-
-.-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
-/ / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ 
-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'  `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
-</pre>
-<h1>Test Sanitisation</h2>
-    <h3>Tasks 11 - 15. These input fields include a variety of different SQL statements to exploit, with sanitation to user inputs. </h3>
-<pre>
-.-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
-/ / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ 
-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'  `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
-</pre>
+    <pre>
+    .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
+ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
+`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
+    </pre>
     <h2> Task 11 </h2>
 
-        <!-- select with mysqli escape and no quotes -->
+        
          <form action="functions_external/sqli11.php" method="get">
-            ID <input type="text" name="id"></br></br>
+            ID <input type="text" name="name"></br></br>
             <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>
     <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
@@ -289,45 +279,50 @@
     <h2> Task 12 </h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="functions_external/sqli12.php" method="get">
-            ID <input type="text" name="id">
+            ID <input type="text" name="name">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>
     <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
     </pre>
+
     <h2> Task 13 </h2>
 
 
-        <!-- select with special escape keywords-->
          <form action="functions_external/sqli13.php" method="get">
-            ID <input type="text" name="id">
+            
+</br>            Name2 <input type="text" name="name2">
+
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
-        </form>
+            
+            Submit Request: <button type="submit">Go</button>
+        </form>  
     <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
     </pre>
+        <h1>Test Sanitisation</h2>
+    <h3>Tasks 14 - 20. These input fields include a variety of different SQL statements to exploit, with sanitation to user inputs. </h3>
+
     <h2> Task 14 </h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="functions_external/sqli14.php" method="get">
             ID <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>
     <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
@@ -337,13 +332,13 @@
     <h2> Task 15 </h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="functions_external/sqli15.php" method="get">
             Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>
             <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
@@ -353,13 +348,13 @@
         <h2> Task 16 </h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="functions_external/sqli16.php" method="get">
             Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>
     <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
@@ -370,11 +365,11 @@
 
 
          <form action="functions_external/sqli17.php" method="get">
-            Name <input type="text" name="name">
+            Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
-            Submit Request: <button type="submit">Get Name</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>
     <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
@@ -384,13 +379,13 @@
         <h2> Task 18 </h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="functions_external/sqli18.php" method="get">
-            Name <input type="text" name="name">
+            Name <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>
     <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
@@ -399,31 +394,30 @@
     </pre>
         <h2> Task 19 </h2>
 
-
-        <!-- select with special escape keywords-->
-        <form action="functions_external/sqli19.php" method="get">
-</br>            Name2 <input type="text" name="name2">
-
+         <form action="functions_external/sqli19.php" method="get">
+            ID <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
-        </form>    <pre>
+            
+            Submit Request: <button type="submit">Go</button>
+        </form>
+           <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
 `-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'   `-`-'
     </pre>
-        <h2> Task 20 </h2>
+
+        <h2> Task 20</h2>
 
 
-        <!-- select with special escape keywords-->
+        
          <form action="functions_external/sqli20.php" method="get">
 
 </br>            ID <input type="text" name="id">
 </br></br>
 <input type="hidden" name="difficulty" id="difficulty" value="None">
-            Feedback
-            Submit Request: <button type="submit">Get ID</button>
+            
+            Submit Request: <button type="submit">Go</button>
         </form>    <pre>
     .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-.   .-.-
  / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \ \ / / \
