@@ -25,24 +25,9 @@ mysql -se "SHOW VARIABLES" -u root -p | grep -e general_log
 
 Alter the permissions of the general log 
 ```
-chmod 755 /path/to/general_log_dir
-chmod 755 /path/to/general_log_dir/general.log
+chmod +rw /path/to/general_log_dir/general.log
 ```
 
-For the given web application, create the associated user and table in mySQL:
-
-```bash
-CREATE USER 'server'@'localhost' IDENTIFIED BY 'Qazwsxedcr12@';
-CREATE DATABASE sqliDB;
-CREATE TABLE `users` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(500) DEFAULT NULL,
-  `pass` varchar(500) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
-);
-GRANT ALL PRIVILEGES ON sqliDB.users TO 'server'@'localhost';
-```
 
 ## Inital Setup - SQLiMicroBenchmark
 
@@ -75,7 +60,7 @@ The code contains the four variants SQIRL in addition to its random equivalent :
 - (1) DQN
 - (2) DQN_RND
 - (3) One_Hot_Encoder_DQN
-- (4) Worker_DQN_RND
+- (4) Worker_DQN_RND - SQIRL
 
 SQIRL has several command line arguments to alter its behaviour:
 ```
@@ -93,6 +78,7 @@ SQIRL has several command line arguments to alter its behaviour:
 --agent_unique_id (-i)	# ID of the agent used for logging
 --agent 								# SQIRL Variant: 0 for Random, 1 for DQN, 2 for DQN_RND, 3 for One_Hot_Encoder_DQN_RND, 4 for Worker_DQN_RND
 --learning							# Boolean to set if SQIRL is in learning mode
+--model_dir 						# Directory containing model checkpoints, if not set a new agent will begin training
 
 # Environment Flags 
 --episodes (-e)					# Maximum number of episodes per input found
@@ -125,14 +111,14 @@ SQIRL is also designed to run with a number of worker agents with a centralised 
 
 
 ```
-python3 Worker_DQN_RND_Server.py -u NUMBER_OF_CLIENTS -model_dir path/to/saved/model
+python3 Worker_DQN_RND_Server.py -u NUMBER_OF_CLIENTS --model_dir path/to/saved/model
 ```
 Each of the worker agents can then be run from an alternative terminal following the instructions for the Centralised Agents:
 ```
-python3 sqirl.py -i 1 -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --agent 2 --loss_critera 9999999 --win_criteria 14 --agent 4 -i 1
-python3 sqirl.py -i 1 -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --agent 2 --loss_critera 9999999 --win_criteria 14 --agent 4 -i 2
-python3 sqirl.py -i 1 -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --agent 2 --loss_critera 9999999 --win_criteria 14 --agent 4 -i 3
-python3 sqirl.py -i 1 -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --agent 2 --loss_critera 9999999 --win_criteria 14 --agent 4 -i 4
+python3 sqirl.py -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --loss_criteria 9999999 --win_criteria 14 --agent 4 -i 1
+python3 sqirl.py -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --loss_criteria 9999999 --win_criteria 14 --agent 4 -i 2
+python3 sqirl.py -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --loss_criteria 9999999 --win_criteria 14 --agent 4 -i 3
+python3 sqirl.py -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --loss_criteria 9999999 --win_criteria 14 --agent 4 -i 4
 ```         
 
 ## Log files
@@ -147,11 +133,11 @@ We include the DQN and Worker_DQN Agent models.
 To train the variants of sqirl 
 ```
 # DQN agent
-python3 sqirl.py -i 1 -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --loss_critera 9999999 --win_criteria 14 --agent 1
+python3 sqirl.py -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --loss_criteria 9999999 --win_criteria 14 --agent 1
 # DQN agent using RND
-python3 sqirl.py -i 1 -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --loss_critera 9999999 --win_criteria 14 --agent 2
+python3 sqirl.py -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --loss_criteria 9999999 --win_criteria 14 --agent 2
 # DQN agent using a one-hot-encoded input space 
-python3 sqirl.py -i 1 -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --loss_critera 9999999 --win_criteria 14 --agent 3
+python3 sqirl.py -u http://localhost:8000/training.php -v 2 --log_file /path/to/mysql/log.log --loss_criteria 9999999 --win_criteria 14 --agent 3
 
 ```
 
