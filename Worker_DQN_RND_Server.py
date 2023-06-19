@@ -24,10 +24,10 @@ mutex_4 = threading.Lock()
 mutex_5 = threading.Lock()
 host = '127.0.0.1'
 port = 1234
-save_time = time.strftime("%Y-%m-%d_%H-%M-%S")
+load_path = ''
+#save_time = time.strftime("%Y-%m-%d_%H-%M-%S")
 #global save_file_model
-save_file_model = os.path.join("RL_Agent","Agents","Worker_DQN_RND_Server","Checkpoint","Q_value.model")
-save_file_model = re.sub('Checkpoint', f'Checkpoint-{save_time}', save_file_model)
+save_file_model = os.path.join("stats_logs","domain_time",'Checkpoint',"Q_value.model")
 state_size = State_Representation.size()+5
 action_size = 1
 agents_paramters = []
@@ -98,16 +98,21 @@ def service_client(connection):
     global __finished_update
     global neural_network
     global agents_paramters
+    global save_file_model
+    global load_path
     send_msg(connection,str.encode('ACK'))
 
     # check type of service
     data = recv_msg(connection)
     message = data.decode('utf-8')
     # if init 
-    if message =="INIT":
+    if "INIT" in message:
         # send current paramters
-        network_parameters = pickle.dumps(neural_network.get_parameters())
-        send_msg(connection,network_parameters)
+        save_file_model = re.sub('domain', message.split('INIT:')[-1], save_file_model)
+        if not os.path.exists(save_file_model.split('Q_value.model')[0]):
+            os.makedirs(save_file_model.split('Q_value.model')[0])
+        init_parameters = pickle.dumps({'save_loc':save_file_model, 'load_loc': load_path,'network_parameters': neural_network.get_parameters()})
+        send_msg(connection,init_parameters)
 
     # else if update paramters
     elif message =="UPDATE":
@@ -215,18 +220,20 @@ if __name__ == "__main__":
         try:
             load_path = os.path.join(options.model_dir +'Q_value.model')
         except:
+            #load_path = os.path.join(os.getcwd() + '/RL_Agent/pretrained_agents/Worker_DQN_RND_Server/Q_value.model')
             load_path = None
         neural_network = WorkerNeuralNetwork.load_model(load_path)
         if neural_network is None:
-            print("No saved model. Initlize new Neural Network....")
+            print("No saved model. Initialise new Neural Network....")
             neural_network = WorkerNeuralNetwork(state_size, action_size)
-
+        else:
+            print(f'Loaded model: {load_path}')
 
         save_time = time.strftime("%Y-%m-%d_%H-%M-%S")
         #global save_file_model
-        save_file_model = re.sub('Checkpoint', f'Checkpoint-{save_time}', save_file_model)
-        os.makedirs(save_file_model.split('Q_value.model')[0])
-        print(f'Model will be saved in {save_file_model}') 
+        save_file_model = re.sub('time', f'{save_time}', save_file_model)
+        
+        #print(f'Model will be saved in {save_file_model}') 
 
         set_clients(int(options.clients))
 

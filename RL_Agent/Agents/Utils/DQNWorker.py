@@ -20,7 +20,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 class DQNWorker:
     # server_host = '127.0.0.1'
     # server_port = 1234
-    def __init__(self,state_size,action_size,save_file_model,save_file_mem,name,server_host,server_port,load,learning=True) -> None:
+    def __init__(self,state_size,action_size,name,server_host,server_port,domain,learning=True) -> None:
         self.learning = learning
         self.BATCH_SIZE = 512
         self.GAMMA = 1
@@ -33,21 +33,23 @@ class DQNWorker:
         self.name = name
         self.state_size = state_size
         self.action_size = action_size
-        self.Q_value = DQNWorker.load_model(server_host, server_port, state_size, action_size)
+        self.id = name.split('syntax_fixing_action_')[-1]
+        self.Q_value, self.load_mem, self.save_dir_mem = DQNWorker.load_model(server_host, server_port, state_size, action_size, domain)
         self.server_host = server_host
         self.server_port = server_port
-
-        self.memory = DQNWorker.load_mem(load)
+        self.load_mem = self.load_mem.replace('id', self.id)
+        
+        self.memory = DQNWorker.load_mem(self.load_mem)
         if self.memory is None:
             self.memory = deque(maxlen=self.MEM_CAPACITY)
 
-        if not os.path.exists(save_file_model):
-            os.makedirs(save_file_model.split('Q_value.model')[0])
+        #if not os.path.exists(save_file_model):
+        #    os.makedirs(save_file_model.split('Q_value.model')[0])
 
         self.optimizer = torch.optim.Adam(self.Q_value.parameters(), lr=self.learning_rate)
         self.loss_fn = torch.nn.SmoothL1Loss()
-        self.save_dir_model = save_file_model
-        self.save_dir_mem = save_file_mem
+        self.save_dir_mem = self.save_dir_mem.replace('id', self.id)
+        
 
         pass
     def send_msg(sock, msg):
@@ -75,7 +77,7 @@ class DQNWorker:
             data.extend(packet)
         return data
 
-    def load_model(server_host,server_port,state_size,action_size):
+    def load_model(server_host,server_port,state_size,action_size,domain):
         # create new nerual network
         q_value = WorkerNeuralNetwork(state_size, action_size)
 
@@ -93,12 +95,15 @@ class DQNWorker:
             raise Exception(f"[DQN_Worker-> sync_Q_target] got responce {ack}, should be ACK")
 
         # send init command
-        DQNWorker.send_msg(ClientSocket, str.encode("INIT"))
+        DQNWorker.send_msg(ClientSocket, str.encode(f"INIT:{domain}"))
 
 
         # get updated paramters
-        server_paramters = DQNWorker.recv_msg(ClientSocket)
-        server_paramters_loaded = pickle.loads(server_paramters)
+        init_parameter = DQNWorker.recv_msg(ClientSocket)
+        init_parameter = pickle.loads(init_parameter)
+        load_path = init_parameter['load_loc'] + f'/Q_value_id.mem' if  init_parameter['load_loc'] is not None else ''
+        save_dir_mem = init_parameter['save_loc'].split('Q_value.model')[0] + 'Q_value_id.mem'
+        server_paramters_loaded = init_parameter['network_parameters']
 
         # update online paramters
         q_value.update_paramters(server_paramters_loaded)
@@ -107,7 +112,7 @@ class DQNWorker:
         # q_value.target.load_state_dict(q_value.online.state_dict())        
         ClientSocket.close()
 
-        return q_value
+        return q_value, load_path, save_dir_mem
 
     def save_mem(self,curr_step):
         with open(self.save_dir_mem,"wb") as f:

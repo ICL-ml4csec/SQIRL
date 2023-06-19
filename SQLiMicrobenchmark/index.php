@@ -17,7 +17,7 @@
 \__ \| (_) || |__ | |  \ \/\/ / | _| | _ \\__ \| _| |   / \ V /  | _| |   /  
 |___/ \__\_\|____||_|   \_/\_/  |___||___/|___/|___||_|_\  \_/   |___||_|_\  
         </pre>
-        <h4>A deliberately vulnerable web application containing 15 different examples of SQLI.</h4>
+        <h4>A deliberately vulnerable web application containing 30 different examples of SQLI.</h4>
         <!-- <pre>                             
                              .-"""""-.
                             /\ /\ /\ /\

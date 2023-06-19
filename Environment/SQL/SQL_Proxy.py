@@ -14,7 +14,7 @@ class SQL_Proxy:
 
     def get_all_sql_statments(self,data_input):
         '''
-            get all available sql statments in the logs related to the input
+            get all available sql statements in the logs related to the input
         '''
         with open(self.file_name, 'r',errors='ignore') as content_file:
             content = content_file.read()
@@ -59,7 +59,7 @@ class SQL_Proxy:
                 starting_idx += 1
      
             
-            # filter 3 by sql starting statment
+            # filter 3 by sql starting statement
             if len(possible_sql) > 1:
                 lengths = [SQL_Proxy.LCSubStr(sql_input.sql_starting_stmt,current_statment,len(sql_input.sql_starting_stmt),len(current_statment)) for current_statment in possible_sql]
                 possible_sql = [current_statment for current_statment in possible_sql if SQL_Proxy.LCSubStr(sql_input.sql_starting_stmt,current_statment,len(sql_input.sql_starting_stmt),len(current_statment)) > 0.8]

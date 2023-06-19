@@ -15,7 +15,7 @@ from RL_Agent.Agents.Utils.Neural_Network import DQN_neural_network
 # Get cpu or gpu device for training.
 device = "cuda" if torch.cuda.is_available() else "cpu"
 class RDN:
-    def __init__(self,state_size,action_size,save_file_model,save_file_mem,name) -> None:
+    def __init__(self,state_size,action_size,name) -> None:
         self.BATCH_SIZE = 512
         self.GAMMA = 1
         self.MEM_CAPACITY = 10000
@@ -33,8 +33,8 @@ class RDN:
 
         self.optimizer = torch.optim.Adam(self.Q_value.parameters(), lr=self.learning_rate)
         self.loss_fn = torch.nn.SmoothL1Loss()
-        self.save_dir_model = save_file_model
-        self.save_dir_mem = save_file_mem
+        #self.save_dir_model = save_file_model
+        #self.save_dir_mem = save_file_mem
 
         pass
 
