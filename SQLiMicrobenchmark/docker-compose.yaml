@@ -13,7 +13,7 @@ services:
         ports:
             - 8000:80
     db_seeder:
-        image: mysql
+        image: mysql:5.7
         volumes:
           - ./init.sql:/db.sql
         environment:
@@ -23,7 +23,7 @@ services:
           - db
     db:
         container_name: db
-        image: mysql
+        image: mysql:5.7
         restart: always
         environment:
             MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
