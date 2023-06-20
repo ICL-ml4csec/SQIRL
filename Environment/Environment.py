@@ -117,7 +117,7 @@ class SQLI_Environment:
             if change_input:
                 raise Exception("no input left")
 
-            # print("[Environment->reset] reset the current input")
+            
             self.current_input_entry.reset()
             if self.current_input_entry.is_escaped_context():
                 self.__current_game = Game_Type.BEHAVIOR_CHANGING
@@ -136,8 +136,8 @@ class SQLI_Environment:
         '''
             apply the action on the input and return game, updated state and reward
         '''
-        # print()
-        # print("---------------------[Environment]---------------------")
+        
+        
         assert(self.__current_game is not None)
 
         # validate action
@@ -152,7 +152,7 @@ class SQLI_Environment:
 
         # check if new sql statement sent and update game type
         new_statement = self.__sql_filter.get_new_sql_statement(self.current_input_entry.input)
-        # print(f"[environment->step] new statment seen: {new_statement}")
+        
         if new_statement is not None:
             # update history
             self.current_input_entry.update_sql_history(new_statement)
@@ -161,50 +161,33 @@ class SQLI_Environment:
             # check if any sanitized elements from input
             if self.current_input_entry.get_next_sanitized_token() is not None:
                 sanitized_element = self.current_input_entry.get_next_sanitized_token()
-                # print(f"[Environment] found sanatisation element {sanitized_element}")
+                
                 self.__last_game = self.__current_game
                 self.__current_game = Game_Type.SANITIZATION_ESCAPING
-                # print(f"[Environment->step] game changed from {self.__last_game} to {self.__current_game}")
-                # input(f"[Environment->step]no error first santize")
-
+                
             # change game type to behvaior changing if syntax fixing
             elif  not self.current_input_entry.is_escaped_context():
-                # assert(self.__last_game != None)
-                # switch so reward givin from fixing syntax
-                # assert(self.__before_syntax_fixing != None)
                 self.__last_game = self.__current_game
                 self.__current_game = Game_Type.SYNTAX_FIXING
                 self.__before_syntax_fixing = None
-                # print(f"[Environment->step] game changed from {self.__last_game} to {self.__current_game}")
-                # input(f"[Environment->step] no error syntax not escaped going to syntax 2")
 
             else:
                 self.__escapes +=1
                 self.__last_game = self.__current_game
                 self.__current_game = Game_Type.BEHAVIOR_CHANGING
-                # print(f"[Environment->step] game changed from {self.__last_game} to {self.__current_game}")
-                # input(f"[Environment->step] no error behaviour")
-
-
-            # # if sanitized escaping check if element escape sanitization if it exist and not removed
-            # if self.__current_game == Game_Type.SANITIZATION_ESCAPING and not self.current_input_entry.is_payload_token_sanatized(self.__current_sanitization):
-            #     self.__current_game = Game_Type.BEHAVIOR_CHANGING
-            #     self.__last_game = Game_Type.SANITIZATION_ESCAPING
 
         else:
             
-            # check if any sanitized elements from input
-                # change game to syntax fixing
-                # assert(self.__current_game != None)
-                self.__last_game = self.__current_game
-                self.__before_syntax_fixing = self.current_game
-                self.__current_game = Game_Type.SYNTAX_FIXING
-                self.__current_error = True
-                # print(f"[Environment->step] game changed from {self.__last_game} to {self.__current_game}")
-                # input(f"[Environment->step] error syntax fixing")
+            # change game to syntax fixing
+            self.__last_game = self.__current_game
+            self.__before_syntax_fixing = self.current_game
+            self.__current_game = Game_Type.SYNTAX_FIXING
+            self.__current_error = True
+                
+                
 
 
-        # check if behavior changed
+        # check if behaviour changed
         if not self.__current_error and self.__current_game is not Game_Type.SANITIZATION_ESCAPING and self.current_input_entry.is_behavior_changed():
             self.__last_game = self.__current_game
             self.__current_game = Game_Type.DONE
@@ -230,7 +213,7 @@ class SQLI_Environment:
         # get payload
         state["payload"] = self.current_input_entry.payload
 
-        # get sql statment
+        # get sql statement
         state["sql"] = self.current_input_entry.sql_history[-1]
 
         # available actions
@@ -248,13 +231,13 @@ class SQLI_Environment:
             generate reward based on the current state and game
         '''
         assert(self.__current_game is not None and self.current_input_entry is not None)
-        # print(f"[Environment->reward] last state {self.__last_game} current_state {self.__current_game}")
+        
         if self.__current_game == Game_Type.BEHAVIOR_CHANGING:
             if self.__last_game == Game_Type.SYNTAX_FIXING:
                 # last game was syntax fixing and get fixed
                 return -1
             elif self.__last_game == Game_Type.SANITIZATION_ESCAPING:
-                #last game was sanatisation and get escaped
+                #last game was sanitisation and get escaped
                 return -1
             else:
                 # if context exist
@@ -264,9 +247,7 @@ class SQLI_Environment:
                     in_context_reward = (self.__reward_score[self.__current_game]["in_context"] * len(self.current_input_entry.in_context_elements()))
                     out_context_reward = (self.__reward_score[self.__current_game]["out_context"] * ((1- len(self.current_input_entry.in_context_elements())))/ flat_index_length)
                     # if any context escape element inserted +ve
-                    # escape_context = self.__reward_score[self.__current_game]["escape_context"] if self.current_input_entry.is_context_escaped() else self.__reward_score[self.__current_game]["unescaped_context"]
-
-                    # input(f"[Environment->reward] behviour rewards: in context elements ({self.__reward_score[self.__current_game]['in_context']} * {len(self.current_input_entry.in_context_elements())}) / {flat_index_length}= {in_context_reward}, escape context {escape_context}")
+                    
                     return -1
                 else:
                     change_behviour = self.__reward_score[self.__current_game]["change_behavior"] if self.current_input_entry.is_context_escaped() else self.__reward_score[self.__current_game]["unchanged_behavior"]
@@ -285,7 +266,7 @@ class SQLI_Environment:
             if self.__last_game == Game_Type.SYNTAX_FIXING:
                 return -1
             else:
-                # sanatisation escaping
+                # sanitisation escaping
                 return -1
 
 
@@ -294,10 +275,10 @@ class SQLI_Environment:
                 # last game was syntax fixing and get fixed
                 return 0
             elif self.__last_game == Game_Type.SANITIZATION_ESCAPING:
-                #last game was sanatisation and get escaped
+                #last game was sanitisation and get escaped
                 return 0
             elif  self.__last_game == Game_Type.BEHAVIOR_CHANGING:
-                #last game was behviour and get chnaged
+                #last game was behaviour and get changed
                 return 0
             else:
                 # done
@@ -313,7 +294,7 @@ class SQLI_Environment:
             TODO: reduce the number of actions based on sql statement
         '''
         assert(self.__current_game is not None)
-        # get payload index of after context if behviour changing
+        # get payload index of after context if behaviour changing
         out_of_context_starting_index = self.current_input_entry.get_starting_out_of_context_payload_index()
 
         if self.is_end_to_end:

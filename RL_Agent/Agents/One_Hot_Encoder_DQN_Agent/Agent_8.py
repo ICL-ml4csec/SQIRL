@@ -38,7 +38,7 @@ class Agent_8:
         current_payload = current_state["payload"]
 
 
-        # print current sql statment
+        # print current sql statement
         current_sql = current_state["sql"]
 
 

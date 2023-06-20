@@ -305,7 +305,7 @@ def sqirl_cli(print_func,target_url, max_depth, verbose, db_type,log_file, model
                     print_func.addstr(f"Running episode: {current_episode + 1}, average time taken: {round(avg_time_taken, 2)} sec, total number of wins: {total_no_wins}, total number of losses: {total_no_losses}\n")
                 print_func.addstr(" \n")
                 if last_injection_win:
-                    print_func.addstr("Last Successfull Injection:\n")
+                    print_func.addstr("Last Successful Injection:\n")
                     print_func.addstr(f"{last_injection_win}\n")
                     print_func.addstr(" \n")
 
