@@ -27,7 +27,6 @@ class SQL_Filter:
         filtered_inputs = []
         sql_statements = []
         for current_rep_input in inputs:
-            # print(f"[SQL_Filter->test for sql statment] test input {current_rep_input.action} in parent link {current_rep_input.parent_link}")
             # send request
             res = current_rep_input.send_token()
 
@@ -42,12 +41,8 @@ class SQL_Filter:
                     current_clone_input.seen_responce += 1
 
                     # construct sql object with input token
-                    # print(current_statment)
-                    # print(current_clone_input.token)
-                    # input("parsing new sql for identifer")
                     sql = SQL(current_statment,current_clone_input.token)
                     current_clone_input.sql_starting_stmt = sql.sql_starting_stmt
-                    # input(f"[SQL_Filter->test for sql statment] sql starting statment {current_clone_input.sql_starting_stmt}")
                     sql_statements.append(sql)
                     filtered_inputs.append(current_clone_input)
 

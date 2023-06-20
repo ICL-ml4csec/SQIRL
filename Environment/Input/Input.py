@@ -50,23 +50,16 @@ class Input:
         body = self.create_request_body(self.token)
         try:
             if self.type == "form":
-                # print(f"[Input] send form with token {self.token} to {self.action}")
-                # join the url with the action (form request URL)
                 url = self.action
-                # print(f"[input->send token] body of post data {body}")
                 if self.method == "post":
                     res = self.session.post(url, data=body)
                 elif self.method == "get":
                     res = self.session.get(url, params=body)
             else:
-                # print(f"[Input] send dynamic with token {self.token} to {self.action}")
-                # print(f"[input->send token] body of post data {body}")
 
                 url = self.action
 
                 res = self.session.get(url, params=body)
-            # print(f"[input->send_token] responce found {res.status_code}")
-            # input(res.text)
             return res
 
         except:
@@ -90,17 +83,12 @@ class Input:
         else:
             url = self.action
             res = self.session.get(url, params=body)
-        # print(f"[input->send_request] responce found{res}")
-        # f = open(f"req{self.sent_request}.stat","w+")
-        # f.write(res.text)
-        # f.close()
         return res
             
 
     def create_request_body(self,payload):
         data = {}
         if self.type =="form":
-            # print(self.inputs)
             for input_tag in self.inputs:
                 # check if in static list
                 if input_tag["name"] in self.static_param.keys():
@@ -153,10 +141,6 @@ class Input:
         return data
 
     def reset(self):
-        # # how many responce seen in the past
-        # self.seen_responce = 0
 
-        # # how many request sent in the past
-        # self.sent_request = 0
         pass
 

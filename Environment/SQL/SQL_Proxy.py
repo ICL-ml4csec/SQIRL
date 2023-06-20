@@ -59,7 +59,7 @@ class SQL_Proxy:
                 starting_idx += 1
      
             
-            # filter 3 by sql starting statement
+            # filter 3 by sql starting statment
             if len(possible_sql) > 1:
                 lengths = [SQL_Proxy.LCSubStr(sql_input.sql_starting_stmt,current_statment,len(sql_input.sql_starting_stmt),len(current_statment)) for current_statment in possible_sql]
                 possible_sql = [current_statment for current_statment in possible_sql if SQL_Proxy.LCSubStr(sql_input.sql_starting_stmt,current_statment,len(sql_input.sql_starting_stmt),len(current_statment)) > 0.8]

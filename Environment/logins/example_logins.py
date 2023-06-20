@@ -148,12 +148,6 @@ def spark_login(session):
     headers = {
         'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.28 Safari/537.36'}
 
-    # html_data = self.session.get("http://localhost:8008/?controller=AuthController&action=login",headers=headers)
-
-    # form_soup = BeautifulSoup(html_data.content, 'html.parser')
-
-    # csrf_token = form_soup.find('input', {'name':'csrf_token'})['value']
-
     url = "http://localhost:8888/hotel_management_system/ajax.php"
     data = {
         "username": "a",
@@ -167,15 +161,8 @@ def spark_login(session):
 
 
 def elearning_login(session):
-    #self.session = session.Session()
     headers = {
         'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.28 Safari/537.36'}
-
-    # html_data = self.session.get("http://localhost:8008/?controller=AuthController&action=login",headers=headers)
-
-    # form_soup = BeautifulSoup(html_data.content, 'html.parser')
-
-    # csrf_token = form_soup.find('input', {'name':'csrf_token'})['value']
 
     url = "http://localhost:8888/vcs/register.php"
     data = {

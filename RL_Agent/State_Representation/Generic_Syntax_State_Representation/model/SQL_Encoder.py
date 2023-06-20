@@ -23,11 +23,8 @@ class SQL_Encoder(nn.Module,):
         encoder_hidden = self.initHidden()
         encoder_outputs = torch.zeros(self.max_length, self.hidden_size, device=torch.device("cuda" if torch.cuda.is_available() else "cpu"))
 
-        # print(input_tensor.size())
-        # print(f"[SQL_Encoder->encode]input_tensor size {input_tensor.size()}")
         for ei in range(length):
             encoder_output, encoder_hidden = self(input_tensor[ei], encoder_hidden)
-            # print(f"[SQL_Encoder->encode]encoder_output size {encoder_output.size()}")
             encoder_outputs[ei] = encoder_output[0, 0]
 
         return encoder_outputs, encoder_hidden

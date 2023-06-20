@@ -37,7 +37,7 @@ class Payload_Representation:
         # convert sql to generic and trim
         generic_sql = self.generic_parser.convert_generic(payload)
 
-        # embbed data 
+        # embed data 
         embedded_data = Payload_Representation.payload_embedding(generic_sql)
         # convert to tensor input
         tensored_input = torch.tensor(embedded_data, dtype=torch.long, device=self.device).view(-1, 1)
@@ -47,21 +47,5 @@ class Payload_Representation:
 
         # encode
         output, hidden = self.encoder.encode(tensored_input,input_length)
-
-        
-        # # decoder input
-        # decoder_input = torch.tensor([[Payload_Representation.token_to_idx["SOS".casefold()]]], device=torch.device("cuda" if torch.cuda.is_available() else "cpu"))
-        # # decode to evaluate error
-        # decoder_output = self.decoder.decode(decoder_input,output,hidden,input_length)
-        # # get number of wrong index
-        # acc = 0
-        # for current_output_idx in range(len(decoder_output)):
-        #     if Payload_Representation.idx_to_token[embedded_data[current_output_idx]] == Payload_Representation.idx_to_token[decoder_output[current_output_idx]]:
-        #         acc += 1
-        # acc = float(acc)/float(input_length)
-
-
-
-
 
         return list(hidden.view(-1).detach().numpy())

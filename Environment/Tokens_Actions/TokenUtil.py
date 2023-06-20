@@ -16,27 +16,16 @@ class TokenUtil:
 
     def generate_random_condition():
         '''
-            generate condtion true or false randomly
+            generate condition true or false randomly
         '''
         return SLEEP_Token(0)
 
-        # if random.randint(0,1):
-        #     operand_1 = NumberRepresentation_Token(1)
-        #     operand_2 = NumberRepresentation_Token(1)
-        #     operator = OperatorRepresentation_Token("=")
-        # else:
-        #     operand_1 = NumberRepresentation_Token(1)
-        #     operand_2 =  NumberRepresentation_Token(2)
-        #     operator = OperatorRepresentation_Token("=")
 
-        # condition_token = Condition_Token(operand_1,operand_2,operator)
-        # return condition_token
-        # pass
     
 
     def generate_random_statement():
         '''
-            generate Statment from set of predefined statments structure
+            generate Statement from set of predefined statements structure
         '''
         statement = random.choice(statement_list)
         

@@ -53,9 +53,6 @@ class SQL:
         if matcher is not None:
             splited_statment_before = matcher.group(1)
             splited_statment_after = matcher.group(2)
-
-            # print(f"[SQL->divide_by_identifer] statment before: {splited_statment_before}")
-            # print(f"[SQL->divide_by_identifer] statment after: {splited_statment_after}")
             return splited_statment_before,splited_statment_after
         else:
             raise Exception(f"TOKEN NOT FOUND\n SQL: {statment}")
@@ -77,11 +74,9 @@ class SQL:
                 # check white_space
                 whitespace = r"|".join([re.escape(e) for e in OperatorRepresentation_Token.special_operators])  +r"|"+r"|".join([re.escape(e) for e in Whitespace_Token.whitespace_type_mapping.values()]) + r"|" + r"|".join([re.escape(e) for e in Comment_Token.comment_type_mapping.values()]) +r"|"+r"|".join([re.escape(e) for e in Quote_Token.quote_type_mapping.values()])+r"|"+r"|".join([re.escape(e) for e in Paranthesis_Token.paranthesis_type_mapping.values()])
                 special_chars = re.finditer(whitespace,current_match)
-                # print(f"[SQL->divide string by word boundries] found special char 1 {len(list(copy.deepcopy(special_chars))) > 0} for {current_match}")
                 
                 if len(list(re.finditer(whitespace,current_match))) > 0:
                     spans = [c.span() for c in re.finditer(whitespace,current_match)]
-                    # print(f"[SQL->divide string by word boundries] found special char 2 {len(list(re.finditer(whitespace,current_match))) > 0} for {current_match}")
                     
                     starting_index = [c[0] for c in spans]
                     ending_index = [c[1] for c in spans]
@@ -98,7 +93,6 @@ class SQL:
                 else:
                     result.append(current_match)
                 word = True
-        # print(f"[SQL -> divide string by word boundries] result list of tokens parsed {result} for [{statment}]")
         return result
 
     def convert_words_to_tokens(words:list,identifier:str):
@@ -161,7 +155,6 @@ class SQL:
                     current_pass.append(OperatorRepresentation_Token.parse(str(last_pass[current_index]) + str(last_pass[current_index+1])))
                     current_index += 1#op 1
                     current_index += 1#op 2
-                    # print(current_pass)
                     changed = True
 
                 # full comement --
@@ -190,7 +183,6 @@ class SQL:
 
             last_pass = copy.deepcopy(current_pass)
 
-        # input(f"[SQL->convert words to tokens] tokens generated final are {current_pass}")
         return current_pass
 
     def parse_string(statement:str,identifier:str):
@@ -199,7 +191,6 @@ class SQL:
             we assume the identifer is the starting point 
         '''
         # split the statment to remove the staring token
-        # input(f"[SQL->parse_string] statment type {type(statement)}")
         statment_before, statment_after = SQL.divide_by_identifer(statement,identifier)
         # get all words and non words
         result = []
@@ -261,21 +252,17 @@ class SQL:
                 regex.append(r".*?")
 
         regex = "".join(regex)
-        # print(f"[SQL->get_in_between_quotes] regex of in between is {regex}")
 
         # check that there is string exist in that area otherwise empty
         if re.search(regex,self.sql_statment) is not None :
 
             string = re.search(regex,self.sql_statment).groups(1)[0]
-            # print(f"[SQL->get_in_between_quotes] string of inbetween tokens is {string}")
 
             # find all quotes in order
             quote_regex = r"|".join(Quote_Token.quote_type_mapping.values())
-            # print(f"[SQL->get_in_between_quotes] quote_regex is {quote_regex}")
 
             return [m.group(0) for m in re.finditer(quote_regex, string)]
         else:
-            # print(f"[SQL->get_in_between_quotes] no quotes found")
 
             return []
 
@@ -291,8 +278,6 @@ class SQL:
 
         # payload flat tokens
         payload_base_tokens = payload.get_tokens_base_idx()
-        # print()
-        # print(f"[SQL->is_affective_behviour_changing] payload identifer base idx {payload_base_tokens[payload_identifier_token_base_idx]} and payload token 2 base index {payload_base_tokens[payload_token_2_base_idx]}")
 
         # validate identifier token
         assert(isinstance(payload_base_tokens[payload_identifier_token_base_idx],IdentifierRepresentation_Token))
@@ -300,16 +285,13 @@ class SQL:
         # check if identifier inside quotes
         open_quotes = []
         quote_open_before_ident = 0
-        # print(f"[SQL->is_affective_behviour_changing] sql tokens: {self.get_tokens().flat_idx_tokens_list()}")
         for ii, current_token in enumerate(self.get_tokens().flat_idx_tokens_list()):
             # check if quote
             if isinstance(current_token,Quote_Token):
-                # print(f"[SQL->is_affective_behviour_changing] found  quote {current_token} in index {ii}")
                 # check if any same quote opened
                 found_open = False
                 for i, current_opend_quotes in reversed(list(enumerate(open_quotes))):
                     if current_opend_quotes == str(current_token):
-                        # print(f"[SQL->is_affective_behviour_changing] pop quote {current_opend_quotes} at index {i}")
                         open_quotes.pop(i)
                         found_open = True
                         break
@@ -322,24 +304,18 @@ class SQL:
                 quote_open_before_ident = len(open_quotes)
                 break
         
-        # print(f"[SQL->is_affective_behviour_changing] open quotes found before identifer are {open_quotes} with len {quote_open_before_ident}")
         
         # if there is quote open then identifier within quotes
         if quote_open_before_ident > 0:
             # apply regex to find out if the quotes have been closed between identifer and token
             quote_list = self.get_in_between_quotes(payload,payload_identifier_token_base_idx,payload_token_2_base_idx)
-            # print(f"[SQL->is_affective_behviour_changing] closed quotes found after identifer and before token are {quote_list} with len {len(quote_list)}")
-            # print(f"[SQL->is_affective_behviour_changing] closed quotes found after identifer and before token reversed {list(reversed(quote_list))} with len {len(quote_list)}")
             is_outside_identifer_Context,lefted_quotes = SQL.list_after(quote_list, open_quotes[0])
-            # print(f"[SQL->is_affective_behviour_changing] is outside{(is_outside_identifer_Context)}")
 
             if is_outside_identifer_Context:
                 # get reduced quotes
-                # print(f"[SQL->is_affective_behviour_changing] quotes before reduce{(lefted_quotes)}")
 
                 reduced_quotes = SQL.reduce_quotes_to_open(lefted_quotes)
                 # check that no open quotes
-                # print(f"[SQL->is_affective_behviour_changing] check if open and closed matches,lefted quotes unclosed{(reduced_quotes)}")
 
                 if len(reduced_quotes) == 0:
                     # all quotes closed and the token not withen quotes
@@ -359,7 +335,6 @@ class SQL:
             # identifier with no context
             token_in_identifier_context = False
             token_inside_quote = False
-        # print(f"[SQL->is_affective_behviour_changing] is token in identifer context {token_in_identifier_context}")
 
         
         # check wether commenting before token 2 based on payload flat indexing
@@ -370,28 +345,26 @@ class SQL:
         toret = []
         pstack = []
         while current_token < payload_token_2_base_idx:
-            # print(f"[SQL -> is_affective_behviour_changing] check if  token {payload_base_tokens[payload_identifier_token_base_idx + current_token]} is comment")
+
             if isinstance(payload_base_tokens[payload_identifier_token_base_idx + current_token],FullComment_Token) or (isinstance(payload_base_tokens[payload_identifier_token_base_idx + current_token],Comment_Token) and payload_base_tokens[payload_identifier_token_base_idx + current_token].comment_category( )== Comment_Category.Full_Comment):
-                # print(f"[SQL -> is_affective_behviour_changing] full comment token before token 2")
+
                 is_commented = True
                 break
             if isinstance(payload_base_tokens[payload_identifier_token_base_idx + current_token],Comment_Token) and payload_base_tokens[payload_identifier_token_base_idx + current_token].comment_category( )== Comment_Category.Open_Range_Comment:
-                # print(f"[SQL -> is_affective_behviour_changing] open comment token before token 2")
 
                 pstack.append(current_token)
             elif isinstance(payload_base_tokens[payload_identifier_token_base_idx + current_token],Comment_Token) and payload_base_tokens[payload_identifier_token_base_idx + current_token].comment_category( )==Comment_Category.Close_Range_Comment:
-                # print(f"[SQL -> is_affective_behviour_changing] close comment token before token 2")
+
 
                 if len(pstack) > 0:
                     toret.append([pstack.pop(), current_token])
             current_token += 1
 
         
-        # check whther we have opened a range comment and not closed
+        # check whether we have opened a range comment and not closed
         if len(pstack) > 0:
             is_commented = True
             
-        # print(f"[SQL->is_affective_behviour_changing] the three bools {token_in_identifier_context}, {is_commented}, {token_inside_quote}")
         return not (token_in_identifier_context or  is_commented or token_inside_quote)
 
     def is_keyword_after_payload_commented(self,payload,identifer_token_base_index:int):
@@ -404,7 +377,6 @@ class SQL:
             if isinstance(current_token,FullComment_Token) and self.is_affective_behviour_changing(payload,identifer_token_base_index,current_token_idx):
                 is_sql_keyowrds_after_payload_commented = self.is_sql_keywords_after_payload(payload)
                 break
-        # print(f"[SQL->is_keyword_after_payload_commented] is keyword commented {is_sql_keyowrds_after_payload_commented}")
         return is_sql_keyowrds_after_payload_commented
     def is_sql_keywords_after_payload(self,payload:Payload):
         '''
@@ -421,15 +393,12 @@ class SQL:
             if current_payload_token_idx < len(payload_tokens) -1:
                 regex += r".*?"
         regex += r"(.*)"
-        # print(f"[SQL->is_sql_keywords_after_payload] regex {regex}")
         results_1 = re.search(regex,self.sql_statment)
         if results_1 is not None :
             # get string of after payload
             after_payload_str  = results_1.groups(1)[0]
-            # print(f"[SQL->is_sql_keywords_after_payload] found string {after_payload_str}")
 
             if any(y in after_payload_str.casefold() for y in KeywordRepresentation_Token.reserved_keywords):
-                # print(f"[SQL->is_sql_keywords_after_payload] found keyword after payload")
                 return True
             else:
                 return False
@@ -524,22 +493,17 @@ class SQL:
                 if current_payload_token_idx+1 != paylaod_flat_token_idx:
                     regex += r".*?"
         
-        # print(f"[is_payload_token_sanatized] regex of payload {regex} with paylaod_flat_token_idx {paylaod_flat_token_idx}")
 
         # match payload regex to sql statment and see if they match the token wanted or other elements exist
         match_found = re.search(regex,self.sql_statment,flags=re.IGNORECASE)
         # if match
         if match_found:
-            # print(f"[is_payload_token_sanatized] found match string: [{match_found.groups()}]")
             match_string = match_found.groups(1)[0]
             if match_string.casefold().startswith(str(payload_flat_tokens[paylaod_flat_token_idx]).casefold()):
-                # print("[is_payload_token_sanatized] both matched and payload matches")
                 return None
             else:
-                # print(f"is_payload_token_sanatized] element have been sanatized {(str(payload_flat_tokens[paylaod_flat_token_idx]),match_string)} with index {paylaod_flat_token_idx}")
                 return paylaod_flat_token_idx
         else:
-            # print(f"[is_payload_token_sanatized] element have been sanatized {(str(payload_flat_tokens[paylaod_flat_token_idx]),)} with index {paylaod_flat_token_idx}")
             return paylaod_flat_token_idx
 
     def get_generic_statment(self):
@@ -613,11 +577,9 @@ class SQL:
         # check if identifier inside quotes
         open_quotes = []
         quote_open_before_ident = 0
-        # print(f"[is_identifier_in_context] sql tokens: {self.get_tokens().flat_idx_tokens_list()}")
         for ii, current_token in enumerate(self.get_tokens().flat_idx_tokens_list()):
             # check if quote
             if isinstance(current_token,Quote_Token):
-                # print(f"[is_identifier_in_context] found  quote {current_token} in index {ii}")
                 # check if any same quote opened
                 found_open = False
                 for i, current_opend_quotes in reversed(list(enumerate(open_quotes))):
@@ -647,16 +609,13 @@ class SQL:
         # check if identifier inside quotes
         open_quotes = []
         quote_open_before_ident = 0
-        # print(f"[is_identifier_in_context] sql tokens: {self.get_tokens().flat_idx_tokens_list()}")
         for ii, current_token in enumerate(self.get_tokens().flat_idx_tokens_list()):
             # check if quote
             if isinstance(current_token,Quote_Token):
-                # print(f"[is_identifier_in_context] found  quote {current_token} in index {ii}")
                 # check if any same quote opened
                 found_open = False
                 for i, current_opend_quotes in reversed(list(enumerate(open_quotes))):
                     if current_opend_quotes == current_token:
-                        # print(f"[is_identifier_in_context] pop quote {current_opend_quotes} at index {i}")
                         open_quotes.pop(i)
                         found_open = True
                         break
@@ -668,9 +627,7 @@ class SQL:
             if isinstance(current_token,IdentifierRepresentation_Token):
                 quote_open_before_ident = len(open_quotes)
                 break
-        # print(f"[SQL-> in_context_elements] open quotes before identifier {open_quotes}")
         closing_quotes = list(reversed(open_quotes))
-        # print(f"[SQL-> in_context_elements] close quotes {closing_quotes}")
         in_context_elements = []
         current_token_index = 0
         is_ident_reached = False
@@ -678,9 +635,7 @@ class SQL:
         while current_token_index < len(flat_index_sql_tokens):
             if is_ident_reached:
                 if len(closing_quotes) > 0:
-                    # print(f"[SQL ->in_context_elements] compare elements {flat_index_sql_tokens[current_token_index]} with {closing_quotes[0]} == {str(flat_index_sql_tokens[current_token_index]) == closing_quotes[0]}")
                     if str(flat_index_sql_tokens[current_token_index]) == closing_quotes[0]:
-                        # print(f"[SQL-> in_context_elements] found closing quote {flat_index_sql_tokens[current_token_index]}")
                         closing_quotes.pop(0)
                     else:
                         in_context_elements.append(flat_index_sql_tokens[current_token_index])
@@ -691,7 +646,6 @@ class SQL:
                 is_ident_reached = True
             
             current_token_index += 1
-        # print(f"[SQL-> in_context_elements] in context elements are {in_context_elements}")
         return in_context_elements
 
     def get_identifier_closing_quote(self):
@@ -702,16 +656,13 @@ class SQL:
         # check if identifier inside quotes
         open_quotes = []
         quote_open_before_ident = 0
-        # print(f"[is_identifier_in_context] sql tokens: {self.get_tokens().flat_idx_tokens_list()}")
         for ii, current_token in enumerate(self.get_tokens().flat_idx_tokens_list()):
             # check if quote
             if isinstance(current_token,Quote_Token):
-                # print(f"[is_identifier_in_context] found  quote {current_token} in index {ii}")
                 # check if any same quote opened
                 found_open = False
                 for i, current_opend_quotes in reversed(list(enumerate(open_quotes))):
                     if current_opend_quotes == current_token:
-                        # print(f"[is_identifier_in_context] pop quote {current_opend_quotes} at index {i}")
                         open_quotes.pop(i)
                         found_open = True
                         break

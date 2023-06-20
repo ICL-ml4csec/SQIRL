@@ -30,7 +30,7 @@ class SQL_Representation:
     id = ["id"]
     # number
     number = ["num"]
-    # paranthesis
+    # parenthesis
     paranthesis = list(Paranthesis_Token.paranthesis_type_mapping.values())
     # quotes
     quotes = list(Quote_Token.quote_type_mapping.values())
@@ -79,19 +79,6 @@ class SQL_Representation:
 
         # encode
         output, hidden = self.encoder.encode(tensored_input,input_length)
-
-
-        
-        # # decoder input
-        # decoder_input = torch.tensor([[SQL_Representation.token_to_idx["SOS".casefold()]]], device=torch.device("cuda" if torch.cuda.is_available() else "cpu"))
-        # # decode to evaluate error
-        # decoder_output = self.decoder.decode(decoder_input,output,hidden,input_length)
-        # # get number of wrong index
-        # acc = 0
-        # for current_output_idx in range(len(decoder_output)):
-        #     if SQL_Representation.idx_to_token[embedded_data[current_output_idx]] == SQL_Representation.idx_to_token[decoder_output[current_output_idx]]:
-        #         acc += 1
-        # acc = float(acc)/float(input_length)
 
         features = list(hidden.view(-1).detach().numpy())
         return features

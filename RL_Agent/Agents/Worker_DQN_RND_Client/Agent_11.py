@@ -36,7 +36,7 @@ class Agent_11:
         current_payload = current_state["payload"]
 
 
-        #  current sql statment
+        #  current sql statement
         current_sql = current_state["sql"]
 
 
@@ -83,7 +83,6 @@ class Agent_11:
         # tune all networks
 
         # syntax
-        #print(self.syntax_fixing_agent.agent_id)
         loss_2_1 = self.syntax_fixing_agent.action_Q_value.tune_network(self.global_timestamp)
 
         # rdn

@@ -13,15 +13,12 @@ class SQL_Proxy_Worker:
 
     def get_all_sql_statments(self,data_input):
         '''
-            get all available sql statments in the logs related to the input
+            get all available sql statements in the logs related to the input
         '''
         with open(self.file_name, 'r',errors='ignore') as content_file:
             content = content_file.read()
             contents_split = content.splitlines()
-            #contents_split = SQL_Proxy_Worker.fix_mysql_file_lines(contents_split)
 
-            #possible_sql = [(re.search(r'\S*\s*\S*\s*\S*\s*(.*)', currentline).group(1),currentline) for currentline in contents_split if data_input.token in currentline]
-            #possible_sql = [x[0] for x in possible_sql]
             possible_sql = []
             for line in contents_split:
                 if data_input.token in line:
@@ -47,18 +44,14 @@ class SQL_Proxy_Worker:
         with open(self.file_name, 'r',errors='ignore') as content_file:
             content = content_file.read()
             contents_split = content.splitlines()
-            #contents_split = SQL_Proxy_Worker.fix_mysql_file_lines(contents_split)
 
             # filter 1 by unique key
-            #possible_sql = [(re.search(r'\S*\s*\S*\s*\S*\s*(.*)', currentline).group(1),currentline) for currentline in contents_split if sql_input.token in currentline]
-            #possible_sql = [x[0] for x in possible_sql]
-            #pp = PrettyPrinter(indent=4)
             possible_sql = []
             for line in contents_split:
                 if sql_input.token in line:
                     possible_sql += [re.search(r'\S*\s*\S*\s*\S*\s*(.*)', line).group(1)]
 
-            # filter 2: remove dublicates
+            # filter 2: remove duplicates
             starting_idx = 1
             final_idx = len(possible_sql)-1
             while starting_idx < final_idx:
@@ -87,7 +80,6 @@ class SQL_Proxy_Worker:
                     assert(False) 
                 lines[index-1] = lines[index-1].strip()+ " " +lines[index].strip()
                 lines.pop(index)
-            # print(f"[SQL Proxy -> fix mysql lines] index {index} and lines length {len(lines)}")
         return lines
 
     def LCSubStr(X, Y, m, n):

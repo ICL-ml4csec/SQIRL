@@ -78,7 +78,7 @@ class DQNWorker:
         return data
 
     def load_model(server_host,server_port,state_size,action_size,domain):
-        # create new nerual network
+        # create new neural network
         q_value = WorkerNeuralNetwork(state_size, action_size)
 
         # connect to server
@@ -98,17 +98,17 @@ class DQNWorker:
         DQNWorker.send_msg(ClientSocket, str.encode(f"INIT:{domain}"))
 
 
-        # get updated paramters
+        # get updated parameters
         init_parameter = DQNWorker.recv_msg(ClientSocket)
         init_parameter = pickle.loads(init_parameter)
         load_path = init_parameter['load_loc'] + f'/Q_value_id.mem' if  init_parameter['load_loc'] is not None else ''
         save_dir_mem = init_parameter['save_loc'].split('Q_value.model')[0] + 'Q_value_id.mem'
         server_paramters_loaded = init_parameter['network_parameters']
 
-        # update online paramters
+        # update online parameters
         q_value.update_paramters(server_paramters_loaded)
 
-        # update target paramters
+        # update target parameters
         # q_value.target.load_state_dict(q_value.online.state_dict())        
         ClientSocket.close()
 
@@ -130,7 +130,7 @@ class DQNWorker:
 
     def tune_network(self,curr_step):
         if curr_step % self.sync_every == 0:
-            # send paramters to server and update with new paramters
+            # send parameters to server and update with new parameters
             self.sync_Q_target()
 
         if curr_step % self.save_every == 0 and self.learning:
@@ -205,17 +205,17 @@ class DQNWorker:
         # send update command
         DQNWorker.send_msg(ClientSocket, str.encode("UPDATE"))
 
-        # send paramters
+        # send parameters
         DQNWorker.send_msg(ClientSocket, pickle.dumps(self.Q_value.get_parameters()))
 
-        # get updated paramters
+        # get updated parameters
         server_paramters = DQNWorker.recv_msg(ClientSocket)
         server_paramters_loaded = pickle.loads(server_paramters)
 
-        # update online paramters
+        # update online parameters
         self.Q_value.update_paramters(server_paramters_loaded)
 
-        # update target paramters
+        # update target parameters
         self.Q_value.target.load_state_dict(self.Q_value.online.state_dict())
         ClientSocket.close()
 

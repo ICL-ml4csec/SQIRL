@@ -27,9 +27,9 @@ class One_Hot_Encoder_Payload_Representation:
 
     def one_hot_encode(current_embeding):
         '''
-            returns a one hot encoding of the embeding
+            returns a one hot encoding of the embedding
         '''
-        # check embedidng valid
+        # check embedding valid
         assert(One_Hot_Encoder_Payload_Representation.is_valid_embedding(current_embeding))
         # convert to one hot encode
         return [1 if current_hot_encode == current_embeding else 0 for current_hot_encode in range(len(One_Hot_Encoder_Payload_Representation.tokens_embedding))]
@@ -41,11 +41,11 @@ class One_Hot_Encoder_Payload_Representation:
         # convert sql to generic and trim
         generic_sql = self.generic_parser.convert_generic(payload)
 
-        # embbed data 
+        # embed data 
         embedded_data = One_Hot_Encoder_Payload_Representation.payload_embedding(generic_sql)
         
 
-        # padd if needed
+        # pad if needed
         for current_padd in range(len(embedded_data),self.max_length):
             embedded_data.append(One_Hot_Encoder_Payload_Representation.token_to_idx[""])
 

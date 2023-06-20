@@ -38,7 +38,6 @@ class KeywordRepresentation_Token(Token):
         return True if s.casefold() in KeywordRepresentation_Token.reserved_keywords else False
 
     def is_all_caps(self):
-        # print(f"[keyword] is {self.__keyword} all caps {self.__keyword.isupper()} and {self.__keyword.islower()}")
         if self.__keyword.isupper() or self.__keyword.islower():
             return True
         else:

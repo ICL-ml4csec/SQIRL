@@ -86,7 +86,6 @@ class Payload:
             tokens = self.base_token.get_tokens_list_base_idx(pos,flat_end_index)
 
             comment_token = FullComment_Token(type,[])
-            # self.base_token.replace_range_tokens_base_idx(pos,flat_end_index,comment_token)
             self.base_token.insert_token_base_idx(comment_token,pos)
 
         elif action == 2:# add comment range
@@ -126,26 +125,6 @@ class Payload:
             quote_token = Quote_Token(type)
             self.base_token.insert_token_base_idx(quote_token,pos)
 
-            # # check if any matching quote to build string token in base tokens
-            # base_tokens = self.base_token.token_list
-            # current_token_idx = pos+1
-            # while(current_token_idx < len(base_tokens)):
-            #     if isinstance(base_tokens[current_token_idx],Quote_Token) and base_tokens[current_token_idx].type_value() == quote_token.type_value():
-            #          # get token list
-            #         tokens_tmp = self.base_token.get_tokens_list_base_idx(pos+1,current_token_idx-1)
-            #         print(f"[Payload] found tokens between quotes {tokens_tmp}")
-            #         base_token_tmp = Base_Token()
-            #         for curren_token in tokens_tmp:
-            #             base_token_tmp.append_token_base_idx(curren_token)
-
-            #         # add comment range token
-            #         string = String_Token(str(base_token_tmp),type)
-            #         self.base_token.replace_range_tokens_base_idx(pos,current_token_idx,string)
-            #         print(f"[Payload] replaced tokens to string {string}")
-            #         print(f"final payload list became{self.base_token.token_list}")
-            #         input()
-            #         break
-            #     current_token_idx += 1
 
         elif action == 5:# add whitespace
             # get pos, type
@@ -356,14 +335,6 @@ class Payload:
         starting_index = self.escaped_context if self.escaped_context is not None else 1
             
         if  Token.Category.SYNTAX_FIXING in action_category:
-            # # add comma where possible
-            
-            # for current_pos in range(1,no_tokens+1):
-            #     if current_pos  < no_tokens and isinstance(self.base_token.token_list[current_pos],FullComment_Token):
-            #         actions.append({"action":0,"range":[current_pos,current_pos],"type":0})
-            #         break
-            #     elif current_pos == no_tokens or not isinstance(self.base_token.token_list[current_pos],FullComment_Token):
-            #         actions.append({"action":0,"range":[current_pos,current_pos],"type":0})
             
             # add comment type 0
             for current_pos in range(1,no_tokens+1):
@@ -371,29 +342,6 @@ class Payload:
                     break
                 else:
                     actions.append({"action":1,"range":[current_pos,current_pos],"type":0})
-
-            # add comment type 1 (except at the end as any last spaces get trimmed)
-            # for current_pos in range(1,no_tokens):
-            #     if current_pos < no_tokens and isinstance(self.base_token.token_list[current_pos],FullComment_Token):
-            #         break
-            #     actions.append({"action":1,"range":[current_pos,current_pos],"type":1})
-
-            # add comment range
-            # generate all possible forward ranges
-            # for current_pos_1 in range(1,no_tokens+1):
-            #     if current_pos_1 < no_tokens and isinstance(self.base_token.token_list[current_pos_1],FullComment_Token):
-            #         for current_pos_2 in range(current_pos_1,no_tokens+1):
-            #             actions.append({"action":2,"range":[current_pos_1,current_pos_2],"type":0})
-            #         break
-            #     for current_pos_2 in range(current_pos_1,no_tokens+1):
-            #         actions.append({"action":2,"range":[current_pos_1,current_pos_2],"type":0})
-
-            # add paranthesis type 0
-            # for current_pos in range(starting_index,no_tokens+1):
-            #     if current_pos < no_tokens and isinstance(self.base_token.token_list[current_pos],FullComment_Token):
-            #         actions.append({"action":3,"range":[current_pos,current_pos],"type":0})
-            #         break
-            #     actions.append({"action":3,"range":[current_pos,current_pos],"type":0})
 
             # # add paranthesis type 1
             for current_pos in range(1,no_tokens+1):
@@ -421,29 +369,9 @@ class Payload:
                 if current_pos < no_tokens and isinstance(self.base_token.token_list[current_pos],FullComment_Token):
                     actions.append({"action":4,"range":[current_pos,current_pos],"type":2})
                     break
-                actions.append({"action":4,"range":[current_pos,current_pos],"type":2})
-            
+                actions.append({"action":4,"range":[current_pos,current_pos],"type":2})    
 
-            # # add whitespace type 0
-            # for current_pos in range(1,no_tokens):
-            #     if current_pos < no_tokens and isinstance(self.base_token.token_list[current_pos],FullComment_Token):
-            #         actions.append({"action":5,"range":[current_pos,current_pos],"type":0})
-            #         break
-            #     actions.append({"action":5,"range":[current_pos,current_pos],"type":0})
-
-            # # add whitespace type 1
-            # for current_pos in range(1,no_tokens+1):
-            #     actions.append({"action":5,"range":[current_pos,current_pos],"type":1})
-
-            # # add string
-            # for current_pos in range(1,no_tokens+1):
-            #     if current_pos < no_tokens and isinstance(self.base_token.token_list[current_pos],FullComment_Token):
-            #         actions.append({"action":6,"range":[current_pos,current_pos],"type":0})
-            #         break
-            #     actions.append({"action":6,"range":[current_pos,current_pos],"type":0})
-
-
-             # remove token
+            # remove token
             for current_pos in range(1,no_tokens):
                 if not isinstance(self.base_token.token_list[current_pos],IdentifierRepresentation_Token):
                     actions.append({"action":18,"range":[current_pos,current_pos],"type":0})
@@ -462,77 +390,17 @@ class Payload:
                 else: 
                     actions.append({"action":7,"range":[current_pos,current_pos],"type":0})
 
-            # # add or token
-            # for current_pos in range(1,no_tokens+1):
-            #     actions.append({"action":8,"range":[current_pos,current_pos],"type":0})
-
-            # # add if token
-            # for current_pos in range(1,no_tokens+1):
-            #     if current_pos < no_tokens and isinstance(self.base_token.token_list[current_pos],FullComment_Token):
-            #         actions.append({"action":9,"range":[current_pos,current_pos],"type":0})
-            #         break
-            #     actions.append({"action":9,"range":[current_pos,current_pos],"type":0})
-
-            # # add sleep token
-            # for current_pos in range(1,no_tokens+1):
-            #     if current_pos < no_tokens and isinstance(self.base_token.token_list[current_pos],FullComment_Token):
-            #         actions.append({"action":10,"range":[current_pos,current_pos],"type":0})
-            #         break
-            #     if (current_pos+1 < no_tokens and isinstance(self.base_token.token_list[current_pos+1],SLEEP_Token)) or(current_pos-1 >= 0 and isinstance(self.base_token.token_list[current_pos-1],SLEEP_Token)):
-            #         pass
-            #     else: 
-            #         actions.append({"action":10,"range":[current_pos,current_pos],"type":0})
-
-            # # add union token
-            # for current_pos in range(1,no_tokens+1):
-            #     if current_pos < no_tokens and isinstance(self.base_token.token_list[current_pos],FullComment_Token):
-            #         actions.append({"action":11,"range":[current_pos,current_pos],"type":0})
-            #         break
-            #     actions.append({"action":11,"range":[current_pos,current_pos],"type":0})
-
-            # # add where token
-            # for current_pos in range(1,no_tokens+1):
-            #     if current_pos < no_tokens and isinstance(self.base_token.token_list[current_pos],FullComment_Token):
-            #         actions.append({"action":12,"range":[current_pos,current_pos],"type":0})
-
-            #         break
-            #     actions.append({"action":12,"range":[current_pos,current_pos],"type":0})
             # remove token
             for current_pos in range(no_tokens):
                  if not isinstance(self.base_token.token_list[current_pos],IdentifierRepresentation_Token) and self.base_token.token_list[current_pos].category() == Token.Category.BEHAVIOR_CHANGING:
                      actions.append({"action":18,"range":[current_pos,current_pos],"type":0})
         if Token.Category.SANATISATION_ESCAPING in action_category or Token.Category.SYNTAX_FIXING in action_category:
 
-            # # capatilize random pos
+            # capitalise random pos
             for current_pos in range(no_flat_tokens):
                 if isinstance(self.base_token.get_token_flat_idx(current_pos),KeywordRepresentation_Token) and self.base_token.get_token_flat_idx(current_pos).is_all_caps():
                     actions.append({"action":13,"range":[current_pos,current_pos],"type":0})
             
-            # # convert str to char
-            # for current_pos in range(no_flat_tokens):
-            #     if isinstance(self.base_token.get_token_flat_idx(current_pos),StringRepresentation_Token):
-            #         actions.append({"action":14,"range":[current_pos,current_pos],"type":0})
-
-            # # convert str to hex
-            # for current_pos in range(no_flat_tokens):
-            #     if isinstance(self.base_token.get_token_flat_idx(current_pos),StringRepresentation_Token):
-            #         actions.append({"action":15,"range":[current_pos,current_pos],"type":0})
-            
-            # # convert str to concat type 0
-            # for current_pos in range(no_flat_tokens):
-            #     if isinstance(self.base_token.get_token_flat_idx(current_pos),StringRepresentation_Token):
-            #         actions.append({"action":16,"range":[current_pos,current_pos],"type":0})
-
-            # # convert str to concat type 1
-            # for current_pos in range(no_flat_tokens):
-            #     if isinstance(self.base_token.get_token_flat_idx(current_pos),StringRepresentation_Token):
-            #         actions.append({"action":16,"range":[current_pos,current_pos],"type":1})
-
-            # # convert str to concat type 2
-            # for current_pos in range(no_flat_tokens):
-            #     if isinstance(self.base_token.get_token_flat_idx(current_pos),StringRepresentation_Token):
-            #         actions.append({"action":16,"range":[current_pos,current_pos],"type":2})
-
             # # change whitespace
             for current_pos in range(no_tokens):
                 token = self.base_token.token_list[current_pos]
@@ -548,12 +416,6 @@ class Payload:
                     actions.append({"action":19,"range":[current_pos,current_pos],"type":0})
 
             
-            # add slash before quotes
-            # for current_pos in range(no_flat_tokens):
-            #     token = self.base_token.get_token_flat_idx(current_pos)
-
-            #     if isinstance(token,Quote_Token) and ((current_pos-1 >= 0 and not isinstance(self.base_token.get_token_flat_idx(current_pos-1),Slash_Token) or current_pos-1 < 0)):
-            #         actions.append({"action":20,"range":[current_pos,current_pos],"type":0}) 
             # remove token
             for current_pos in range(no_tokens):
                 if not isinstance(self.base_token.token_list[current_pos],IdentifierRepresentation_Token):

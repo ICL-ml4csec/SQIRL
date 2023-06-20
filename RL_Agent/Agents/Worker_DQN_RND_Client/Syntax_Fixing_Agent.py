@@ -110,11 +110,11 @@ class Syntax_Fixing_Agent:
                 actions= [(current_state["error"],current_action["action"],current_action["range"],current_action["type"]) for current_action in current_state["actions"]]
                 best_action,best_state,current_q_value = self.get_best_action(actions,representation_vector)
 
-            # get interensic reward
+            # get intrinsic reward
             expon_state = np.exp(last_q_value)
             interensic_reward = min(abs(self.rdn.get_value(expon_state)),0.7)
             
-            # cache interensic reward 
+            # cache intrinsic reward 
             self.rdn.cache(expon_state)
             results_file = open(self.action_Q_value.save_dir_mem.split('Checkpoint')[0] + f"rewards_RDN{self.agent_id}.stats","a")
             results_file.write(f"{reward+interensic_reward}\n")
