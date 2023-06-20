@@ -1,21 +1,9 @@
-import re
-from copy import deepcopy
 import os
 os.environ["NLTK_DATA"] = 'SQIRL/nltk_data'
 import signal
-import socket
-import struct
 import sys
 import optparse
 import time
-from Environment.Environment import Game_Type, SQLI_Environment
-from Manual_Agent.Agent_Random import Agent_Random
-from RL_Agent.Agents.DQN_Agent.Agent_2 import Agent_2
-from RL_Agent.Agents.DQN_RND_Agent.Agent_6 import Agent_6
-from RL_Agent.Agents.One_Hot_Encoder_DQN_Agent.Agent_8 import Agent_8
-from RL_Agent.Agents.Worker_DQN_RND_Client.Agent_11 import Agent_11
-from curses import wrapper, endwin
-import numpy as np
 import traceback
 from RL_Agent.sqirl_core import sqirl_cli as sqril_cmd
 import subprocess
@@ -167,14 +155,14 @@ if __name__ == '__main__':
                 os.killpg(os.getpgid(sub_pro.pid), signal.SIGTERM)
 
         elif options.gui:
-            if num_agents > 1:
+            if int(num_agents) > 1:
                 print(f'Setting --num_agents to 1')
                 num_agents = 1
             log_output = sqril_cmd(print,target_url, max_depth, verbose, db_type,log_file, model_dir, is_learning, no_episodes, max_timestamp, win_criteria, loss_criteria, crawler_input, sql_proxy_input, num_agents, input_selection, agent_type, login_module)
             print(f'SQIRL RUN COMPLETE, PLEASE CONSULT DIRECTORY: {log_output}')
         else:
             try:
-                if num_agents > 1:
+                if int(num_agents) > 1:
                     print(f'Setting --num_agents to 1')
                     num_agents = 1
                 log_output = wrapper(sqril_cmd, target_url, max_depth, verbose, db_type,log_file, model_dir, is_learning, no_episodes, max_timestamp, win_criteria, loss_criteria, crawler_input, sql_proxy_input, num_agents, input_selection, agent_type, login_module)

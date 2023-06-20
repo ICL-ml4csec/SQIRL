@@ -1,5 +1,5 @@
 # --------------------------------Federated learning server--------------------------------
-# store the gloabl neural network and service the clients agents by average weighting all parameters and send the updated prameters.
+# store the global neural network and service the clients agents by average weighting all parameters and send the updated prameters.
 # communication is done using sockets and data transmitted using pickle bytes.
 import copy
 import optparse
@@ -25,9 +25,8 @@ mutex_5 = threading.Lock()
 host = '127.0.0.1'
 port = 1234
 load_path = ''
-#save_time = time.strftime("%Y-%m-%d_%H-%M-%S")
-#global save_file_model
-save_file_model = os.path.join("stats_logs","domain_time",'Checkpoint',"Q_value.model")
+
+save_file_model = os.path.join("stats_logs","domain_time",'Checkpoint_Worker_Server',"Q_value.model")
 state_size = State_Representation.size()+5
 action_size = 1
 agents_paramters = []
@@ -107,14 +106,14 @@ def service_client(connection):
     message = data.decode('utf-8')
     # if init 
     if "INIT" in message:
-        # send current paramters
+        # send current parameters
         save_file_model = re.sub('domain', message.split('INIT:')[-1], save_file_model)
         if not os.path.exists(save_file_model.split('Q_value.model')[0]):
             os.makedirs(save_file_model.split('Q_value.model')[0])
         init_parameters = pickle.dumps({'save_loc':save_file_model, 'load_loc': load_path,'network_parameters': neural_network.get_parameters()})
         send_msg(connection,init_parameters)
 
-    # else if update paramters
+    # else if update parameters
     elif message =="UPDATE":
         data = recv_msg(connection)
         client_data = pickle.loads(data)
@@ -125,7 +124,7 @@ def service_client(connection):
             add_paramters(client_data)
 
         # sensitive area
-        # if final client call update paramter function
+        # if final client call update parameter function
         if is_final_element:
             print(f"final client arrived: {get_barrier_value()}")
             # call update
@@ -138,7 +137,7 @@ def service_client(connection):
             while not __finished_update:
                 pass
 
-        # send current paramters
+        # send current parameters
         network_parameters = pickle.dumps(neural_network.get_parameters())
         send_msg(connection,network_parameters)
 
@@ -204,7 +203,7 @@ def accept_connections(ServerSocket):
 if __name__ == "__main__":
     try:
 
-        # get paramter how many clients
+        # get parameter how many clients
         parser = optparse.OptionParser()
         parser.add_option('-u', '--clients',
                 action="store", dest="clients",

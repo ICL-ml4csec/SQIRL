@@ -1,4 +1,3 @@
-import re
 from copy import deepcopy
 import os
 os.environ["NLTK_DATA"] = 'SQIRL/nltk_data'
@@ -13,9 +12,7 @@ from RL_Agent.Agents.DQN_Agent.Agent_2 import Agent_2
 from RL_Agent.Agents.DQN_RND_Agent.Agent_6 import Agent_6
 from RL_Agent.Agents.One_Hot_Encoder_DQN_Agent.Agent_8 import Agent_8
 from RL_Agent.Agents.Worker_DQN_RND_Client.Agent_11 import Agent_11
-from curses import wrapper, endwin
 import numpy as np
-import traceback
 
 
 def main():
