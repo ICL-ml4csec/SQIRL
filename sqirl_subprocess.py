@@ -176,7 +176,6 @@ def main():
             agent = Agent_11(agent_unique_id,learning=is_learning, domain=domain)
             log_location = agent.syntax_fixing_agent.action_Q_value.save_dir_mem.split('/Checkpoint')[0]
             os.rename("./stats_logs/all_inputs_found.stat",f"./{log_location}/all_inputs_found.stat")
-            # subprocess the server and other agents???
         else:
             if model_dir is None:
                 model_dir = os.path.join("/RL_Agent","pretrained_agents","DQN_Agent")
@@ -186,7 +185,6 @@ def main():
             agent = Agent_2(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
         
         print(f"Log output location: {os.path.abspath(os.path.join(os.getcwd(), log_location))}")
-        print(f'Model will be saved in {agent.syntax_fixing_agent.action_Q_value.save_dir_mem}')
        
 
         # get all_actions_dic

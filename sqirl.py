@@ -138,20 +138,18 @@ if __name__ == '__main__':
         loss_criteria = int(options.loss_criteria)
         crawler_input = (target_url, max_depth)
         sql_proxy_input = (db_type, log_file)
-        agent_unique_id = str(options.num_agents)
+        num_agents = str(options.num_agents)
         input_selection = int(options.input_selection)
         agent_type = int(options.agent_type) if options.agent_type != None else -1
         if agent_type == 4 or (model_dir is not None and 'Worker_DQN_RND_Client 'in model_dir):
             try:
                 print('starting worker server')
                 if model_dir is not None:
-                    #devnull = open(os.devnull, 'wb')
-                    sub_pro = subprocess.Popen(['python3', 'Worker_DQN_RND_Server.py', '-u', agent_unique_id, '--model_dir', model_dir])
+                    sub_pro = subprocess.Popen(['python3', 'Worker_DQN_RND_Server.py', '-u', num_agents, '--model_dir', model_dir])
                 else:
-                    sub_pro = subprocess.Popen(['python3', 'Worker_DQN_RND_Server.py', '-u', agent_unique_id])
+                    sub_pro = subprocess.Popen(['python3', 'Worker_DQN_RND_Server.py', '-u', num_agents])
                     time.sleep(2)
-                #agent_threads = []
-                for agent_id in range(1, int(agent_unique_id)+1):
+                for agent_id in range(1, int(num_agents)+1):
                     call = ['python3', 'sqirl_subprocess.py', '-u', str(target_url), '-i', str(agent_id), '--level', str(max_depth), '--db_type', str(db_type), '--log_file', str(log_file), '--learning', str(is_learning), '-e', str(no_episodes), '--max_timestamp', str(max_timestamp), '--win_criteria', str(win_criteria), '--loss_criteria', str(loss_criteria), '-v', str(verbose), '--input_selection', str(input_selection)]
                     if options.login_function is not None:
                         call.extend(['--login_function_name', str(options.login_function), '--auth_file_path', str(options.module_path)])
@@ -160,12 +158,6 @@ if __name__ == '__main__':
                     else:
                         call.extend(['--agent', '4'])
                     subprocess.call(call)
-                #    print(f'starting agent {agent_id}')
-                #    agent = sqirl_subprocess(args=(print,target_url, max_depth, verbose, db_type,log_file, model_dir, is_learning, no_episodes, max_timestamp, win_criteria, loss_criteria, crawler_input, sql_proxy_input, agent_unique_id, input_selection, agent_type, login_module), 
-                #        name=f"Agent {agent_id}")
-                #    agent_threads.append(agent)
-                #while any(sqirl_agent.thread.is_alive() for sqirl_agent in agent_threads):
-                #    continue
 
                 
                 os.killpg(os.getpgid(sub_pro.pid), signal.SIGTERM)
@@ -174,18 +166,18 @@ if __name__ == '__main__':
                 traceback.print_exc()
                 os.killpg(os.getpgid(sub_pro.pid), signal.SIGTERM)
 
-                #agent_threads[-1].start()
-            #while any(sqirl_agent.thread.is_alive() for sqirl_agent in agent_threads):
-            #    continue
-            #    #print('running...')
-
-                
         elif options.gui:
-            log_output = sqril_cmd(print,target_url, max_depth, verbose, db_type,log_file, model_dir, is_learning, no_episodes, max_timestamp, win_criteria, loss_criteria, crawler_input, sql_proxy_input, agent_unique_id, input_selection, agent_type, login_module)
+            if num_agents > 1:
+                print(f'Setting --num_agents to 1')
+                num_agents = 1
+            log_output = sqril_cmd(print,target_url, max_depth, verbose, db_type,log_file, model_dir, is_learning, no_episodes, max_timestamp, win_criteria, loss_criteria, crawler_input, sql_proxy_input, num_agents, input_selection, agent_type, login_module)
             print(f'SQIRL RUN COMPLETE, PLEASE CONSULT DIRECTORY: {log_output}')
         else:
             try:
-                log_output = wrapper(sqril_cmd, target_url, max_depth, verbose, db_type,log_file, model_dir, is_learning, no_episodes, max_timestamp, win_criteria, loss_criteria, crawler_input, sql_proxy_input, agent_unique_id, input_selection, agent_type, login_module)
+                if num_agents > 1:
+                    print(f'Setting --num_agents to 1')
+                    num_agents = 1
+                log_output = wrapper(sqril_cmd, target_url, max_depth, verbose, db_type,log_file, model_dir, is_learning, no_episodes, max_timestamp, win_criteria, loss_criteria, crawler_input, sql_proxy_input, num_agents, input_selection, agent_type, login_module)
                 print(f'SQIRL RUN COMPLETE, PLEASE CONSULT DIRECTORY: {log_output}')
             except Exception as e:
                 endwin()
