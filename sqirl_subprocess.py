@@ -127,7 +127,9 @@ def main():
         agent_unique_id = str(options.agent_unique_id)
         input_selection = int(options.input_selection)
         agent_type = int(options.agent_type) if options.agent_type != None else -1
-        print("Initialise Environment...\n")
+        if int(agent_unique_id) == 1:
+            add_logo()
+            print("Initialise Environments...\n")
 
         # create instance of env
         is_federated = True if agent_type == 4 else False
@@ -135,15 +137,18 @@ def main():
         env.reset(change_input=False)
         num_inputs = deepcopy(env.total_inputs)
         no_episodes = int(options.episodes) * num_inputs
-        print("Initialise Agent...")
+        if int(agent_unique_id) == 1:
+            print("Initialise Agents...")
         
         save_time = time.strftime("%Y-%m-%d_%H-%M-%S")
         domain = env.current_input_entry.input.action.split('/')[2]
-        if agent_type != 4:
+
+
+        log_location = f'stats_logs/{domain}_{save_time}'
+        if int(agent_type) != 4:
             os.makedirs(f'stats_logs/{domain}_{save_time}')
             os.rename("./stats_logs/all_inputs_found.stat",f"./{log_location}/all_inputs_found.stat")
-        log_location = f'stats_logs/{domain}_{save_time}'
-       
+
         
         # create instance of agent based on supplied agent type
         if agent_type == 0:#Random
@@ -172,7 +177,8 @@ def main():
         elif agent_type == 4 or (model_dir is not None and 'Worker_DQN_RND_Client 'in model_dir):#Worker_DQN_RND
             agent = Agent_11(agent_unique_id,learning=is_learning, domain=domain)
             log_location = agent.syntax_fixing_agent.action_Q_value.save_dir_mem.split('/Checkpoint')[0]
-            os.rename("./stats_logs/all_inputs_found.stat",f"./{log_location}/all_inputs_found.stat")
+            if int(agent_unique_id) == 1:
+                os.rename("./stats_logs/all_inputs_found.stat",f"./{log_location}/all_inputs_found.stat")
         else:
             if model_dir is None:
                 model_dir = os.path.join("/RL_Agent","pretrained_agents","DQN_Agent")
@@ -180,8 +186,8 @@ def main():
             model_checkpoint_file = os.path.join(os.getcwd(), log_location,"DQN_Agent_Checkpoint")
             model_checkpoint_file = os.path.abspath(model_checkpoint_file)
             agent = Agent_2(agent_unique_id,model_checkpoint_file,learning=is_learning, load=model_dir)
-        
-        print(f"Log output location: {os.path.abspath(os.path.join(os.getcwd(), log_location))}")
+        if int(agent_unique_id) == 1:
+            print(f"Log output location: {os.path.abspath(os.path.join(os.getcwd(), log_location))}")
        
 
         # get all_actions_dic
@@ -367,7 +373,7 @@ def main():
 
                 if current_time_stamp >= max_timestamp:
                     max_timestamp_reached = True
-            if current_episode % 10 == 0:
+            if current_episode % 10 == 0 and int(agent_unique_id) == 1:
 
                 print("Summary:\n")
                 if is_learning:
@@ -542,7 +548,7 @@ def add_logo():
 
 if __name__ == '__main__':
 
-        add_logo()
+
         log_output = main()
 
         print(f'SQIRL RUN COMPLETE, PLEASE CONSULT DIRECTORY: {log_output}')

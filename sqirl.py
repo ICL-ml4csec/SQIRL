@@ -133,10 +133,11 @@ if __name__ == '__main__':
             try:
                 print('starting worker server')
                 if model_dir is not None:
-                    sub_pro = subprocess.Popen(['python3', 'Worker_DQN_RND_Server.py', '-u', num_agents, '--model_dir', model_dir])
+                    serve_sub_pro = subprocess.Popen(['python3', 'Worker_DQN_RND_Server.py', '-u', num_agents, '--model_dir', model_dir])
                 else:
-                    sub_pro = subprocess.Popen(['python3', 'Worker_DQN_RND_Server.py', '-u', num_agents])
+                    server_sub_pro = subprocess.Popen(['python3', 'Worker_DQN_RND_Server.py', '-u', num_agents])
                     time.sleep(2)
+                sub_pros = []
                 for agent_id in range(1, int(num_agents)+1):
                     call = ['python3', 'sqirl_subprocess.py', '-u', str(target_url), '-i', str(agent_id), '--level', str(max_depth), '--db_type', str(db_type), '--log_file', str(log_file), '--learning', str(is_learning), '-e', str(no_episodes), '--max_timestamp', str(max_timestamp), '--win_criteria', str(win_criteria), '--loss_criteria', str(loss_criteria), '-v', str(verbose), '--input_selection', str(input_selection)]
                     if options.login_function is not None:
@@ -145,10 +146,12 @@ if __name__ == '__main__':
                         call.extend(['--model_dir', str(model_dir)])
                     else:
                         call.extend(['--agent', '4'])
-                    subprocess.call(call)
+                    sub_pro = subprocess.Popen(call)
+                    sub_pros.append(sub_pro)
+                while any(proc.poll() is None for proc in sub_pros):
+                    True
 
-                
-                os.killpg(os.getpgid(sub_pro.pid), signal.SIGTERM)
+                os.killpg(os.getpgid(server_sub_pro.pid), signal.SIGTERM)
             except Exception as e:
                 print(e)
                 traceback.print_exc()
